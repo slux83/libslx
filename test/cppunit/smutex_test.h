@@ -56,6 +56,7 @@ public:
         mutex->lock();
         mutex->lock();
         mutex->lock();
+        CPPUNIT_ASSERT(mutexNonRecursive->tryLock());
         mutex->unlock();
     }
 

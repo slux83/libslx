@@ -44,6 +44,5 @@ bool SMutex::tryLock()
 {
     int returnValue = pthread_mutex_trylock(&mutex);
 
-    sDebug("SMutex::tryLock(): EBUSY=%s", (returnValue == EBUSY)? "true" : "false");
     return (returnValue != EBUSY);
 }

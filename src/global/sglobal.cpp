@@ -7,6 +7,7 @@
 #include <cstdarg>
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 
 void s_assert(const char *expression, const char *src, int line, const char *msg)
 {
@@ -20,14 +21,17 @@ void s_assert(const char *expression, const char *src, int line, const char *msg
 
 void sDebug(const char *msg, ...)
 {
-    char tmp[256];
+    if (strlen(msg) > 512)
+        return;
+
+    char tmp[512];
     tmp[0] = '\0';
-    tmp[255] = '\0';
+    tmp[511] = '\0';
 
     va_list vl;
     va_start(vl, msg);
     vsprintf(tmp, msg, vl);
-    std::cerr << "DEBUG: " << tmp << std::endl;
+    std::cerr << "DEBUG: " << tmp << std::endl; //FIXME
     va_end(vl);
 }
 

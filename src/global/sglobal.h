@@ -18,6 +18,8 @@
     If you pass the function a format string and a list of arguments,
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
+
+    \warning String greather than 512 bytes are discarded
 */
 void sDebug(const char *msg, ...);
 
@@ -30,6 +32,8 @@ void sDebug(const char *msg, ...);
     If you pass the function a format string and a list of arguments,
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
+
+    \warning String greather than 512 bytes are discarded
 */
 void sWarning(const char *msg, ...);
 
@@ -42,6 +46,8 @@ void sWarning(const char *msg, ...);
     If you pass the function a format string and a list of arguments,
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
+
+    \warning String greather than 512 bytes are discarded
 */
 void sCritical(const char *msg, ...);
 
@@ -56,6 +62,8 @@ void sCritical(const char *msg, ...);
     should be a Latin-1 string.
 
     sFatal raise an application abort.
+
+    \warning String greather than 512 bytes are discarded
 */
 void sFatal(const char *msg, ...);
 

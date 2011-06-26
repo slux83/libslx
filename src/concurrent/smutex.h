@@ -16,9 +16,8 @@
 */
 class SMutex
 {
-
 private:
-    pthread_mutex_t *mutex;
+    pthread_mutex_t mutex;
 
 public:
     /*!
@@ -30,7 +29,7 @@ public:
     /*! Constructor
         \param recursionMode (Defaut Recursive)
     */
-    SMutex(RecursionMode recursionMode = Recursive);
+    SMutex(SMutex::RecursionMode recursionMode = SMutex::Recursive);
 
     /*! Deconstructor
         \warning Destroying a locked mutex may result in undefined behavior.

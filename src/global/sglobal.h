@@ -11,6 +11,18 @@
 #endif
 
 /*!
+    \brief Enumeration of debug levels
+    The fatal level is used in asserts and raise an application abort.
+*/
+typedef enum
+{
+    SMsgLevelDebug,
+    SMsgLevelWarning,
+    SMsgLevelCritical,
+    SMsgLevelFatal
+} SMsgLevel;
+
+/*!
     Calls the message handler with the fatal debug message \a msg. If no
     message handler has been installed, the message is printed to
     stderr.
@@ -73,6 +85,12 @@ void sFatal(const char *msg, ...);
 */
 void s_assert(const char *expression, const char *src, int line, const char *msg = NULL);
 
+/*! \internal
+    This function is used for internal usage
+    \endinternal
+*/
+void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg);
+
 #ifdef S_DISABLE_ASSERT
 #   define S_ASSERT(expr) s_noop();
 #   define S_ASSERT_HR(expr, where, what) s_noop();
@@ -86,5 +104,15 @@ void s_assert(const char *expression, const char *src, int line, const char *msg
     \endinternal
 */
 inline void s_noop() {}
+
+typedef void (*SLogMsgHandler)(SMsgLevel, const char *);
+
+/*!
+    \brief Funcition to passa a custom log message handler
+    \code
+        TODO example
+    \endcode
+*/
+void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 
 #endif // SGLOBAL_H

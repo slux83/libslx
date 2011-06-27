@@ -9,6 +9,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../../src/concurrent/smutex.h"
+#include "../../src/concurrent/smutexlocker.h"
 
 /*!
     \brief Test Unit for SMutex object
@@ -21,6 +22,7 @@ CPPUNIT_TEST(testLockUnlock);
 CPPUNIT_TEST(testLockUnlockRecursive);
 CPPUNIT_TEST(testLockUnlockNonRecursive);
 CPPUNIT_TEST(testLockTryLockUnlockRecursiveNonRecursive);
+CPPUNIT_TEST(testMutexLocker);
 CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -58,13 +60,14 @@ public:
         mutex->lock();
         CPPUNIT_ASSERT(mutexNonRecursive->tryLock());
         mutex->unlock();
+        mutex->unlock();
+        mutex->unlock();
     }
 
     void testLockUnlockNonRecursive()
     {
         mutexNonRecursive->lock();
         mutexNonRecursive->unlock();
-
     }
 
     void testLockTryLockUnlockRecursiveNonRecursive()
@@ -73,6 +76,12 @@ public:
         mutexNonRecursive->lock();
         CPPUNIT_ASSERT(!mutexNonRecursive->tryLock());
         mutexNonRecursive->unlock();
+    }
+
+    void testMutexLocker()
+    {
+        SMutexLocker locker(mutex);
+        (void)locker;   //avoid unused warning
     }
 };
 

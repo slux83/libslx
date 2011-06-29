@@ -1,20 +1,31 @@
 #include "sthread.h"
 #include "smutexlocker.h"
 #include "../global/sglobal.h"
+#include <cstdio>
 
-SThread::SThread() : runStatus(false)
+SThread::SThread(const std::string &threadName) : runStatus(false)
 {
-
+    name = threadName;
 }
 
 SThread::~SThread()
 {
-
 }
 
-void SThread::join()
+bool SThread::join()
 {
+    SMutexLocker locker(&mutex);
+    S_USE_VAR(locker);
 
+    if (!runStatus)
+        return true;
+
+    int returnedValue = pthread_join(thread, NULL);
+
+    if (returnedValue != 0)
+        sWarning("SThread::join() failed with error code %d", returnedValue);
+
+    return (returnedValue == 0);
 }
 
 void SThread::start()
@@ -24,7 +35,7 @@ void SThread::start()
 
     if (runStatus)  //Thread is already runnnig
     {
-        sWarning("SThread::start() SThread [ID=%d] already running", thread);
+        sWarning("SThread::start() SThread [ID=%u] already running", (unsigned long)thread);
         return;
     }
 
@@ -51,8 +62,17 @@ void SThread::start()
         sCritical("SThread::start() cannot create pthread. Returned value: %d", returnedValue);
     }
 
-    //TODO: remove debug
-    sDebug("SThread::start() New thread started [ID=%d]", thread);
+    if (runStatus && name.length() == 0)
+    {
+        nameMutex.lock();
+
+        //Choose a name
+        char tmp[128];
+        sprintf(tmp, "Thread-%d", (int)thread);
+        name = tmp;
+
+        nameMutex.unlock();
+    }
 
     pthread_attr_destroy(&attr);
 }
@@ -68,10 +88,14 @@ bool SThread::isRunning()
 void SThread::run()
 {
     //Nothing to do here
+}
 
-    //TODO: remove debug
-    sDebug("SThread::run() New thread started [ID=%d]", thread);
-    sDebug("SThread::run() Exiting... [ID=%d]", thread);
+std::string SThread::getName() const
+{
+    SMutexLocker locker(&nameMutex);
+    S_USE_VAR(locker);
+
+    return name;
 }
 
 void *SThread::starter(void *arg)
@@ -81,5 +105,7 @@ void *SThread::starter(void *arg)
     SThread *creator = reinterpret_cast<SThread*>(arg);
     creator->run();
 
+    creator->runStatus = false;
     return 0;
 }
+

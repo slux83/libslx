@@ -10,8 +10,8 @@ class SMutex;
 
 /*!
     \brief SMutexLocker class is a convenience class that simplifies locking and unlocking mutexes.
-    The Mutex passed as argument is locked and when the
-    SMutexLocker is destroyed, the mutex is unlocked.
+    The Mutex passed as argument is locked and when the SMutexLocker
+    is destroyed, the mutex is unlocked.
 */
 class SMutexLocker
 {

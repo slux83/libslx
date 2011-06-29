@@ -115,4 +115,6 @@ typedef void (*SLogMsgHandler)(SMsgLevel, const char *);
 */
 void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 
+#define S_USE_VAR(x) (void)(x)
+
 #endif // SGLOBAL_H

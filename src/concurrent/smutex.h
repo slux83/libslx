@@ -16,15 +16,21 @@
 */
 class SMutex
 {
-private:
-    pthread_mutex_t mutex;
-
 public:
     /*!
         Recursive: setup the mutex for recursive mode
         NonRecursive: setup the mutex for non recursive mode
     */
     enum RecursionMode { Recursive, NonRecursive };
+
+private:
+    //! Internal pthread mutex
+    pthread_mutex_t mutex;
+
+    //! The recursive mode
+    SMutex::RecursionMode recursionMode;
+
+public:
 
     /*! Constructor
         \param recursionMode (Defaut Recursive)
@@ -59,6 +65,9 @@ public:
         before another thread can successfully lock it.
     */
     bool tryLock();
+
+    //! \return the recursionMode
+    inline SMutex::RecursionMode getRecursiveMode() const { return recursionMode; }
 };
 
 #endif // SMUTEX_H

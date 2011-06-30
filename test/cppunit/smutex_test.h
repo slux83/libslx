@@ -17,7 +17,6 @@
 class SMutexTest : public CppUnit::TestFixture
 {
 CPPUNIT_TEST_SUITE(SMutexTest);
-
 CPPUNIT_TEST(testLockUnlock);
 CPPUNIT_TEST(testLockUnlockRecursive);
 CPPUNIT_TEST(testLockUnlockNonRecursive);

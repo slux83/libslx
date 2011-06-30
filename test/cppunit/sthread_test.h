@@ -16,7 +16,6 @@
 class SThreadTest : public CppUnit::TestFixture
 {
 CPPUNIT_TEST_SUITE(SThreadTest);
-
 CPPUNIT_TEST(testSingleThreadJoin);
 CPPUNIT_TEST(testMultipleThreadJoin);
 CPPUNIT_TEST_SUITE_END();

@@ -9,7 +9,7 @@
 SMutex::SMutex(SMutex::RecursionMode recursionMode)
 {
     pthread_mutexattr_t mutexAttr;
-
+    this->recursionMode = recursionMode;
     if (recursionMode == SMutex::Recursive)
     {
         pthread_mutexattr_init(&mutexAttr);

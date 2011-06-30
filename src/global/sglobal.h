@@ -93,7 +93,7 @@ void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg);
 
 #ifdef S_DISABLE_ASSERT
 #   define S_ASSERT(expr) s_noop();
-#   define S_ASSERT_HR(expr, where, what) s_noop();
+#   define S_ASSERT_MSG(expr, where, what) s_noop();
 #else
 #   define S_ASSERT(expr) ((expr)? s_noop() : s_assert(#expr, __FILE__, __LINE__))
 #   define S_ASSERT_MSG(expr, msg) ((expr)? s_noop() : s_assert(#expr, __FILE__, __LINE__, msg))
@@ -116,5 +116,8 @@ typedef void (*SLogMsgHandler)(SMsgLevel, const char *);
 void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 
 #define S_USE_VAR(x) (void)(x)
+
+template <typename T> inline const T & sMin(const T &x, const T &y) { if (x < y) return x; return y; }
+template <typename T> inline const T & sMax(const T &x, const T &y) { if (x < y) return y; return x; }
 
 #endif // SGLOBAL_H

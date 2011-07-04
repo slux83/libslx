@@ -15,7 +15,7 @@ class SWaitCondition
 {
 private:
     //! Internal pthread mutex
-    pthread_mutex_t mutex;
+    pthread_mutex_t locker;
 
     //! Internal pthread condition var
     pthread_cond_t cond;

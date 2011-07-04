@@ -8,12 +8,26 @@
 
 #include "../global/sglobal.h"
 
+class SMutex;
+class SWaitCondition;
+
 /*!
-    \brief The SSemaphore class represent a classic n-ari semaphore.
-    \todo must use the wait conditions
+    \brief The SSemaphore class represent a n-ari semaphore.
+    It is implemented in the classic way using one SMutex and
+    a SWaitCondition.
 */
 class SSemaphore
 {
+private:
+    //! Internal mutex
+    SMutex *mutexWaiter;
+
+    //! Internal wait condition
+    SWaitCondition *waitCond;
+
+    //! Available resources
+    int available;
+
 public:
     /*!
         Contructor
@@ -53,8 +67,13 @@ public:
     */
     void release(int n = 1);
 
-    //bool tryAcquire(int n = 1);
-    //bool tryAcquire ( int n, int timeout )
+    /*!
+        Tries to acquire \c n resources.
+        \return true if getAvailable() < \c n this call immediately returns false and doesn't acquire resources
+
+        \note This call never blocks the caller
+    */
+    bool tryAcquire(int n = 1);
 };
 
 #endif // SSEMAPHORE_H

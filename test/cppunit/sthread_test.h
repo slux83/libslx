@@ -64,7 +64,10 @@ public:
         thread2 = NULL;
         thread3 = NULL;
         thread4 = NULL;
-    }
+
+		fflush(stdout);
+	}
+
 
     void testSingleThreadJoin()
     {

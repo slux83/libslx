@@ -42,6 +42,8 @@ public:
 
         delete mutexNonRecursive;
         mutexNonRecursive = NULL;
+
+		fflush(stdout);
     }
 
     void testLockUnlock()

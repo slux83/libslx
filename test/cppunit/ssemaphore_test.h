@@ -78,6 +78,8 @@ public:
             delete t1;
             t1 = NULL;
         }
+
+		fflush(stdout);
     }
 
     void testAcquireReleaseBinarySemaphore()

@@ -19,10 +19,10 @@ class SWaitConditionTest : public CppUnit::TestFixture
 {
 CPPUNIT_TEST_SUITE(SWaitConditionTest);
 CPPUNIT_TEST(testWaitConditionWakeupOne);
-CPPUNIT_TEST(testWaitConditionWakeupAll);
 CPPUNIT_TEST_SUITE_END();
 
 private:
+	//The object to test
     static SWaitCondition *cond1;
 
     //Internal test thread class -------------------------------------- [BEGIN]
@@ -81,6 +81,8 @@ public:
 
         delete t1;
         t1 = NULL;
+
+		fflush(stdout);
     }
 
     void testWaitConditionWakeupOne()
@@ -108,11 +110,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(3, t1->numberOfWakeups);
 
         t1->join();
-    }
-
-    void testWaitConditionWakeupAll()
-    {
-        //TODO
     }
 };
 

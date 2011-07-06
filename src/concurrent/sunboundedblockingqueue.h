@@ -12,39 +12,36 @@
 #include <list>
 
 /*!
-	\brief Unbounded blocking queue thread safe.
+	\brief Unbounded Blocking Queue thread safe.
+
 	This class implements a thread safe and unbounded blocking queue. Tipically
 	this container is very useful when one or more producer threads fill data
 	into the queue. One consumer thread read the data from the queue using
-	dequeue() that blocks the thread if no datas are available. The consumer
+	dequeue() that blocks the thread if no datas are available. The consumer(s)
 	thread will be unlocked when some producer thread inserts some data into the
 	queue.
 
 	\note internally a std::list is used.
 
-	\warning	the function dequeue() is reentrant. This means that you cannot
-				use more than one consumer thread.
+	\note you can use also many consumer threads and many producer threads.
 */
-template <typename T> class SBlockingQueue
+template <typename T> class SUnboundedBlockingQueue
 {
 private:
 	//! The internal container.
 	std::list<T> queue;
 
-	//! Locker for internal operations
-	mutable SMutex enqueueSerialAccess;
-
 	//! Locker for the waitBlockingQueueAccess (not recursive)
-	SMutex dequeueWaitConditionLocker;
+	mutable SMutex waitConditionLocker;
 
 	//! The internal SWaitCondition
 	SWaitCondition waitBlockingQueueAccess;
 
 public:
 	//! Empty constructor
-	inline SBlockingQueue()
+	inline SUnboundedBlockingQueue()
 	{
-		dequeueWaitConditionLocker = SMutex(SMutex::NonRecursive);
+		waitConditionLocker = SMutex(SMutex::NonRecursive);
 	}
 
 	/*! Enqueue the passed element to the end of the queue
@@ -52,7 +49,7 @@ public:
 	*/
 	inline void enqueue(const T &t)
 	{
-		SMutexLocker locker(&enqueueSerialAccess);
+		SMutexLocker locker(&waitConditionLocker);
 		S_USE_VAR(locker);
 
 		queue.push_back(t);
@@ -60,9 +57,12 @@ public:
 		waitBlockingQueueAccess.wakeupOne();
 	}
 
+	/*!
+		\return true if the queue is empty, false otherwise
+	*/
 	inline bool isEmpty() const
 	{
-		SMutexLocker locker(&enqueueSerialAccess);
+		SMutexLocker locker(&waitConditionLocker);
 		S_USE_VAR(locker);
 
 		return queue.empty();
@@ -72,30 +72,19 @@ public:
 		If the queue is empty, the caller thread will be blockd until datas
 		became available.
 		\return T element from queue's front
-		\warning If you use more than one thread to consume the queue's data, the behaviour is unpredictable.
-
 	*/
 	inline T dequeue()
 	{
-		dequeueWaitConditionLocker.lock();
+		SMutexLocker locker(&waitConditionLocker);
+		S_USE_VAR(locker);
 
-		enqueueSerialAccess.lock();
-		if (queue.empty())	//Protect the queue
+		while (queue.empty())
 		{
-			enqueueSerialAccess.unlock();
-			waitBlockingQueueAccess.wait(&dequeueWaitConditionLocker);
-		}
-		else
-		{
-			enqueueSerialAccess.unlock();
+			waitBlockingQueueAccess.wait(&waitConditionLocker);
 		}
 
-		enqueueSerialAccess.lock();
 		T returnVal = queue.front();
 		queue.pop_front();
-		enqueueSerialAccess.unlock();
-
-		dequeueWaitConditionLocker.unlock();
 
 		return returnVal;
 	}

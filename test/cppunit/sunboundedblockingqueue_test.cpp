@@ -3,8 +3,8 @@
 [FILE_HEADER_END]
 ******************************************************************************/
 
-#include "sblockingqueue_test.h"
+#include "sunboundedblockingqueue_test.h"
 
-SBlockingQueue<int>* SBlockingQueueTest::queue = NULL;
+SUnboundedBlockingQueue<int>* SUnboundedBlockingQueueTest::queue = NULL;
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SBlockingQueueTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SUnboundedBlockingQueueTest);

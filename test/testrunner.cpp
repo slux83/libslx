@@ -7,6 +7,9 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include "cppunit/smutex_test.h"
 
+/*
+	Test Runner main function
+*/
 int main (int /*argc*/, char** /*argv*/)
 {
   CppUnit::TextUi::TestRunner runner;

@@ -19,6 +19,9 @@ private:
     //! The mutex passed to the constructor method.
     SMutex *mutex;
 
+	//! Generally false, but become true after the calling of unlock()
+	bool alreadyUnlocked;
+
 public:
     /*! Construct the object and lock the mutex.
         \param mutex shall be a valid SMutex
@@ -27,6 +30,9 @@ public:
 
     //! Destruct the object and unlocks the mutex that was locked in the constructor.
     virtual ~SMutexLocker();
+
+	//! Unlock the mutex
+	void unlock();
 };
 
 #endif // SMUTEXLOCKER_H

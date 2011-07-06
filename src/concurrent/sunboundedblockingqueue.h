@@ -9,6 +9,7 @@
 #include "smutex.h"
 #include "swaitcondition.h"
 #include "smutexlocker.h"
+#include "sabstractblockingqueue.h"
 #include <list>
 
 /*!
@@ -25,7 +26,7 @@
 
 	\note you can use also many consumer threads and many producer threads.
 */
-template <typename T> class SUnboundedBlockingQueue
+template <typename T> class SUnboundedBlockingQueue : public SAbstractBlockingQueue<T>
 {
 private:
 	//! The internal container.

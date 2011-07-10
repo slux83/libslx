@@ -108,7 +108,7 @@ inline void s_noop() {}
 typedef void (*SLogMsgHandler)(SMsgLevel, const char *);
 
 /*!
-    \brief Funcition to passa a custom log message handler
+    \brief Funcition to pass a custom log message handler
     \code
         TODO example
     \endcode

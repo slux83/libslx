@@ -95,7 +95,8 @@ public:
 
 	void tearDown()
 	{
-		delete queue;
+		//delete queue;
+		//NOTE: we cant destroy here the queue. This is just a test :)
 		queue = NULL;
 
 		fflush(stdout);
@@ -214,9 +215,7 @@ public:
 #if 0
 		std::cout << "Dequeues: " << dequeues << std::endl;
 #endif
-
 		//For definition consumer threads have an infinite internal loop that wait data forever
-		//NOTE Don't care about some console Warnings of the SWaitCondition Destructor.
 
 		delete producer1;
 		producer1 = NULL;

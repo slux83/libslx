@@ -12,7 +12,7 @@ file(GLOB SLX_SOURCES   src/*.cpp src/concurrent/*.cpp
                         src/concurrent/*.h
                         src/global/*.h)
 
-set(CMAKE_CXX_FLAGS "-Wall -O0 -pedantic")
+set(CMAKE_CXX_FLAGS "-Wall -g -O0 -pedantic")
 
 if(BUILD_TESTS)
 file(GLOB SLX_TESTS_SOURCES test/cppunit/*_test.cpp test/cppunit/*_test.h )

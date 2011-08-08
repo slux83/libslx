@@ -88,7 +88,8 @@ void sFatal(const char *msg, ...)
     printMessageOnStdErr(SMsgLevelFatal, tmp);
     va_end(vl);
 
-    abort();
+	if (globalHandler == NULL)
+		abort();
 }
 
 void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg)
@@ -114,8 +115,8 @@ void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg)
         prefix = "UNKNOWN  ";
     };
 
-    if (globalHandler == NULL)
-    {
+	if (globalHandler == NULL)
+	{
         std::cerr << prefix << msg << std::endl;
         fflush(stderr);
     }

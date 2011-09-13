@@ -11,6 +11,12 @@
 
 class SMutex;
 
+/*!
+	\brief The SWaitCondition class provides a condition variable for synchronizing threads.
+	QWaitCondition allows a thread to tell other threads that some sort of condition has been met.
+	One or many threads can block waiting for a SWaitCondition to set a condition with wakeupOne() or wakeupAll().
+	Use wakeupOne() to wake one randomly selected condition or wakeupAll() to wake them all.
+*/
 class SWaitCondition
 {
 private:

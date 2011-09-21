@@ -8,5 +8,6 @@
 
 #include "ssignal0.h"
 #include "ssignal1.h"
+#include "ssignal2.h"
 
 #endif // SSIGNAL_H

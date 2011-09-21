@@ -70,6 +70,38 @@ namespace internalS
 			(slotTarget->callableMethod)(a1);
 		}
 	};
+
+	/*!
+		\internal Abstract signal connection with two argument
+	*/
+	template <typename arg1, typename arg2>
+	class SAbstractSignalSlotConnection2
+	{
+	public:
+		virtual void fire(arg1 a1, arg2 a2) = 0;
+	};
+
+	template <class SSlotType, typename arg1, typename arg2>
+	class SSignalSlotConnection2 : public SAbstractSignalSlotConnection2<arg1, arg2>
+	{
+		typedef void (SSlotType::*CallableMethod)();
+
+	private:
+		SSlotType *slotTarget;
+		CallableMethod callableMethod;
+
+	public:
+		explicit SSignalSlotConnection2(SSlotType *target, CallableMethod callable)
+		{
+			slotTarget = target;
+			callableMethod = callable;
+		}
+
+		virtual void fire(arg1 a1, arg2 a2)
+		{
+			(slotTarget->callableMethod)(a1, a2);
+		}
+	};
 }
 
 #endif // SSIGNAL_P_H

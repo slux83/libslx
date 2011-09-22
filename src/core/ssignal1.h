@@ -12,11 +12,11 @@
 template <typename arg1>
 class SSignal1
 {
-	typedef std::list< internalS::SAbstractSignalSlotConnection1<arg1> *> SignalList;
-	typedef typename SignalList::const_iterator SignalListConstIterator;
+	typedef std::list< internalS::SAbstractSignalSlotConnection1<arg1> *> ConnectionList;
+	typedef typename ConnectionList::const_iterator ConnectionListConstIterator;
 
 private:
-	SignalList connections;
+	ConnectionList connections;
 
 public:
 	template <class SSlotType>
@@ -29,8 +29,8 @@ public:
 
 	void fire(arg1 a1)
 	{
-		 SignalListConstIterator it = connections.begin();
-		 SignalListConstIterator end = connections.end();
+		 ConnectionListConstIterator it = connections.begin();
+		 ConnectionListConstIterator end = connections.end();
 
 		while (it != end)
 		{

@@ -10,6 +10,7 @@
 
 SThread::SThread(const std::string &threadName) : runStatus(false)
 {
+	thread = 0;
     name = threadName;
 }
 
@@ -40,7 +41,7 @@ void SThread::start()
 
     if (runStatus)  //Thread is already runnnig
     {
-        sWarning("SThread::start() SThread [ID=%u] already running", (unsigned long)thread);
+		sWarning("SThread::start() SThread [ID=%u] already running", (uint32_t) thread);
         return;
     }
 
@@ -73,7 +74,7 @@ void SThread::start()
 
         //Choose a name
         char tmp[128];
-        sprintf(tmp, "Thread-%d", (int)thread);
+		sprintf(tmp, "Thread-%u", (uint32_t)thread);
         name = tmp;
 
         nameMutex.unlock();

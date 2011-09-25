@@ -7,6 +7,7 @@
 #define STHREAD_H
 
 #include <pthread.h>
+#include <stdint.h>
 #include <string>
 #include "smutex.h"
 
@@ -48,6 +49,15 @@ public:
         \return the thread name
     */
     std::string getName() const;
+
+	/*!
+		Get the thread ID of the caller
+		\return 32-bit number of the POSIX thread ID
+	*/
+	static inline uint32_t getCurrentThreadId()
+	{
+		return (uint32_t) pthread_self();
+	}
 
 protected:
     /*! Thread run function. The default implementation do nothing.

@@ -91,7 +91,7 @@ public:
 
         sleep(2);   //wait until the thread is started
 
-        //Now t1 waits for 5 wakeups
+		//Now t1 waits for 3 wakeups
         CPPUNIT_ASSERT_EQUAL(0, t1->numberOfWakeups);
 
         //First wakeup

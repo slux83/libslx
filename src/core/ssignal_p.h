@@ -6,15 +6,45 @@
 #ifndef SSIGNAL_P_H
 #define SSIGNAL_P_H
 
+#include "../global/sglobal.h"
+#include "../concurrent/smutex.h"
+#include "../concurrent/smutexlocker.h"
+
+class SSlot;
+
 namespace internalS
 {
 	/*!
+		\internal Base signal class
+	*/
+	class SAbstractSignal
+	{
+	protected:
+		SMutex signalMutex;
+
+	public:
+		/*! Disconnect all slots of the slotTarget argument from this signal.
+			Used when the slot object is destroyed
+		*/
+		virtual void disconnectAll(SSlot *slotTarget) = 0;
+
+	};
+
+	class SAbstractSignalSlotConnection
+	{
+	protected:
+		SMutex fireMutex;
+	};
+
+	/*!
 		\internal Abstract signal connection without arguments
 	*/
-	class SAbstractSignalSlotConnection0
+	class SAbstractSignalSlotConnection0 : public SAbstractSignalSlotConnection
 	{
 	public:
 		virtual void fire() = 0;
+
+		virtual SSlot* getTarget() = 0;
 	};
 
 	template <class SSlotType>
@@ -35,7 +65,17 @@ namespace internalS
 
 		virtual void fire()
 		{
-			(slotTarget->callableMethod)();
+			SMutexLocker locker(&fireMutex); S_USE_VAR(locker);
+
+			if (slotTarget != NULL)
+				(slotTarget->callableMethod)();
+			else
+				sWarning("internalS::SSignalSlotConnection0::fire() slotTarget is NULL");
+		}
+
+		SSlot* getTarget()
+		{
+			return slotTarget;
 		}
 	};
 
@@ -69,6 +109,12 @@ namespace internalS
 		{
 			(slotTarget->callableMethod)(a1);
 		}
+
+		SSlotType* getTarget()
+		{
+			return slotTarget;
+		}
+
 	};
 
 	/*!
@@ -100,6 +146,11 @@ namespace internalS
 		virtual void fire(arg1 a1, arg2 a2)
 		{
 			(slotTarget->callableMethod)(a1, a2);
+		}
+
+		SSlotType* getTarget()
+		{
+			return slotTarget;
 		}
 	};
 }

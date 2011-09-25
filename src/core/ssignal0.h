@@ -9,27 +9,40 @@
 #include <list>
 #include "ssignal_p.h"
 
-class SSignal0
+class SSignal0 : public internalS::SAbstractSignal
 {
 	typedef std::list<internalS::SAbstractSignalSlotConnection0*> ConnectionList;
-	typedef typename ConnectionList::const_iterator ConnectionListConstIterator;
+	typedef typename ConnectionList::iterator ConnectionListConstIterator;
 
 private:
 	ConnectionList connections;
 
 public:
 	template <class SSlotType>
-	void connect(SSlotType *slotTarget, void (SSlotType::*callableMethod)())
+	bool connect(SSlotType *slotTarget, void (SSlotType::*callableMethod)())
 	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		if (dynamic_cast<SSlot*>(slotTarget) == NULL)
+		{
+			sWarning("SSignal0::connect() first argument (slotTarget) doesn't extends SSlot class.");
+			return false;
+		}
+
 		internalS::SSignalSlotConnection0<SSlotType> *conn =
 				new internalS::SSignalSlotConnection0<SSlotType> (slotTarget, callableMethod);
 		connections.push_back(conn);
+		slotTarget->_addConnectedSignal(this);
+
+		return true;
 	}
 
 	void fire()
 	{
-		 ConnectionListConstIterator it = connections.begin();
-		 ConnectionListConstIterator end = connections.end();
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
 
 		while (it != end)
 		{
@@ -41,6 +54,22 @@ public:
 	void operator()()
 	{
 		fire();
+	}
+
+	virtual void disconnectAll(SSlot *slotTarget)
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			if ((*it)->getTarget() == slotTarget)
+				it = connections.erase(it);
+			else
+				it++;
+		}
 	}
 };
 

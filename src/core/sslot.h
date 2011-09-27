@@ -23,6 +23,8 @@ public:
 	virtual ~SSlot();
 
 	void _addConnectedSignal(internalS::SAbstractSignal *signal);
+
+	void _signalDestroyed(internalS::SAbstractSignal *signal);
 };
 
 #endif // SSLOT_H

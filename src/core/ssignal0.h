@@ -8,6 +8,7 @@
 
 #include <list>
 #include "ssignal_p.h"
+#include "sslot.h"
 
 class SSignal0 : public internalS::SAbstractSignal
 {
@@ -18,6 +19,26 @@ private:
 	ConnectionList connections;
 
 public:
+
+	virtual ~SSignal0()
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			//Notify to the slot that the signal is dying
+			(*it)->getTarget()->_signalDestroyed(this);
+
+			delete (*it);
+			it++;
+		}
+
+		connections.clear();
+	}
+
 	template <class SSlotType>
 	bool connect(SSlotType *slotTarget, void (SSlotType::*callableMethod)())
 	{
@@ -32,7 +53,7 @@ public:
 		internalS::SSignalSlotConnection0<SSlotType> *conn =
 				new internalS::SSignalSlotConnection0<SSlotType> (slotTarget, callableMethod);
 		connections.push_back(conn);
-		slotTarget->_addConnectedSignal(this);
+		dynamic_cast<SSlot*>(slotTarget)->_addConnectedSignal(this);
 
 		return true;
 	}

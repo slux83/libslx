@@ -27,23 +27,25 @@ private:
 	public:
 		void mySlot0()
 		{
-			sDebug("MySlotClass1::mySlot0()");
+			std::cout << "MySlotClass1::mySlot0()" << std::endl;
 		}
 
 		void mySlot0bis()
 		{
-			sDebug("MySlotClass1::mySlot0bis()");
+			std::cout << "MySlotClass1::mySlot0bis()" << std::endl;
 		}
 
 		void mySlot1(const char* arg1)
 		{
-			sDebug("MySlotClass1::mySlot1(const char* arg1=%s)", arg1);
+			std::cout << "MySlotClass1::mySlot1(const char* arg1='" << arg1
+					  << "')" << std::endl;
 		}
 
 		//Overload
 		void mySlot1(unsigned int arg1)
 		{
-			sDebug("MySlotClass1::mySlot1(unsigned int arg1=%d)", arg1);
+			std::cout << "MySlotClass1::mySlot1(unsigned int arg1=" << arg1
+					  << ")" << std::endl;
 		}
 	};
 
@@ -72,10 +74,19 @@ public:
 
 	void testConnections()
 	{
-		CPPUNIT_ASSERT_EQUAL(mySignal0.connect(&mySlot1, &MySlotClass1::mySlot0), true);
+		bool connectionEsite = false;
+
+		connectionEsite = mySignal0.connect(&mySlot1, &MySlotClass1::mySlot0);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+
+		connectionEsite = mySignal1->connect(&mySlot1, &MySlotClass1::mySlot1);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
 
 		mySignal0.fire();	//as invocation
 		mySignal0();		//as functor
+
+		mySignal1->fire("Hello");	//as invocation
+		(*mySignal1)("Hello");		//as functor
 	}
 };
 

@@ -33,7 +33,7 @@ namespace internalS
 	class SAbstractSignalSlotConnection
 	{
 	protected:
-		SMutex fireMutex;
+		SMutex invocationLocker;
 	};
 
 	/*!
@@ -46,6 +46,9 @@ namespace internalS
 		virtual SSlot* getTarget() = 0;
 	};
 
+	/*!
+		\internal Concrete connection object without arguments
+	*/
 	template <class SSlotType>
 	class SSignalSlotConnection0 : public SAbstractSignalSlotConnection0
 	{
@@ -64,7 +67,8 @@ namespace internalS
 
 		virtual void fire()
 		{
-			SMutexLocker locker(&fireMutex); S_USE_VAR(locker);
+			SMutexLocker locker(&invocationLocker);
+			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
 				(slotTarget->*callableMethod)();
@@ -89,10 +93,13 @@ namespace internalS
 		virtual SSlot* getTarget() = 0;
 	};
 
+	/*!
+		\internal Concrete connection object with one argument
+	*/
 	template <class SSlotType, typename arg1>
 	class SSignalSlotConnection1 : public SAbstractSignalSlotConnection1<arg1>
 	{
-		typedef void (SSlotType::*CallableMethod)();
+		typedef void (SSlotType::*CallableMethod)(arg1);
 
 	private:
 		SSlotType *slotTarget;
@@ -107,7 +114,8 @@ namespace internalS
 
 		virtual void fire(arg1 a1)
 		{
-			SMutexLocker locker(&fireMutex); S_USE_VAR(locker);
+			SMutexLocker locker(& (this->SAbstractSignalSlotConnection::invocationLocker));
+			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
 				(slotTarget->*callableMethod)(a1);

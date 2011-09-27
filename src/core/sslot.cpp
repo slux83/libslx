@@ -22,12 +22,12 @@ SSlot::~SSlot()
 
 void SSlot::_addConnectedSignal(internalS::SAbstractSignal *signal)
 {
-	S_ASSERT_MSG(signal != NULL, "SSlot::_addConnectedSignal() argument NULL");
+	S_ASSERT_MSG(signal != NULL, "SSlot::_addConnectedSignal() NULL argument");
 	connectedSignals.insert(signal);
 }
 
 void SSlot::_signalDestroyed(internalS::SAbstractSignal *signal)
 {
-	S_ASSERT_MSG(signal != NULL, "SSlot::_signalDestroyed() argument NULL");
+	S_ASSERT_MSG(signal != NULL, "SSlot::_signalDestroyed() NULL argument");
 	connectedSignals.erase(signal);
 }

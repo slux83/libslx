@@ -49,25 +49,33 @@ private:
 		}
 	};
 
-	MySlotClass1 mySlot1;
+	MySlotClass1 *mySlot1;
 	SSignal0 mySignal0;
 	SSignal1<const char*> *mySignal1;
 	SSignal1<unsigned int> *mySignal1bis;
 
 public:
+	SSignalSlotTest()
+	{
+		SApplication::init();
+	}
+
 	void setUp()
 	{
 		mySignal1 = new SSignal1<const char*>();
 		mySignal1bis = new SSignal1<unsigned int>();
+		mySlot1 = new MySlotClass1();
 	}
 
 	void tearDown()
 	{
 		delete mySignal1;
 		delete mySignal1bis;
+		delete mySlot1;
 
 		mySignal1 = NULL;
 		mySignal1bis = NULL;
+		mySlot1 = NULL;
 
 		fflush(stdout);
 	}
@@ -76,10 +84,13 @@ public:
 	{
 		bool connectionEsite = false;
 
-		connectionEsite = mySignal0.connect(&mySlot1, &MySlotClass1::mySlot0);
+		connectionEsite = mySignal0.connect(mySlot1, &MySlotClass1::mySlot0);
 		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
 
-		connectionEsite = mySignal1->connect(&mySlot1, &MySlotClass1::mySlot1);
+		connectionEsite = mySignal1->connect(mySlot1, &MySlotClass1::mySlot1);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+
+		connectionEsite = mySignal1bis->connect(mySlot1, &MySlotClass1::mySlot1);
 		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
 
 		mySignal0.fire();	//as invocation
@@ -87,6 +98,14 @@ public:
 
 		mySignal1->fire("Hello");	//as invocation
 		(*mySignal1)("Hello");		//as functor
+
+		mySignal1bis->fire(1);
+
+		//Test implicit conversion
+		mySignal1bis->fire(12.8f);
+
+		//Test overflow
+		mySignal1bis->fire(-1);
 	}
 };
 

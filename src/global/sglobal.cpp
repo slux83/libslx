@@ -15,7 +15,7 @@ static SLogMsgHandler globalHandler = NULL;
 void s_assert(const char *expression, const char *src, int line, const char *msg)
 {
     if (msg)
-        sFatal("ASSERT failure: expression: \"%s\", file %s, line %d, message= \"%s\"",
+		sFatal("ASSERT failure: expression: \"%s\", file %s, line %d, message=\"%s\"",
                expression, src, line, msg);
     else
         sFatal("ASSERT failure: expression: \"%s\", file %s, line %d",

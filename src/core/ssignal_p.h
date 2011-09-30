@@ -9,6 +9,7 @@
 #include "../global/sglobal.h"
 #include "../concurrent/smutex.h"
 #include "../concurrent/smutexlocker.h"
+#include "sapplication.h"
 
 class SSlot;
 
@@ -33,7 +34,10 @@ namespace internalS
 	class SAbstractSignalSlotConnection
 	{
 	protected:
-		SMutex invocationLocker;
+		SMutex* getInvocationLocker(SSlot *slotTarget)
+		{
+			return SApplication::getInstance()->_getSlotMutex(slotTarget);
+		}
 	};
 
 	/*!
@@ -67,7 +71,7 @@ namespace internalS
 
 		virtual void fire()
 		{
-			SMutexLocker locker(&invocationLocker);
+			SMutexLocker locker(getInvocationLocker(slotTarget));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
@@ -114,7 +118,7 @@ namespace internalS
 
 		virtual void fire(arg1 a1)
 		{
-			SMutexLocker locker(& (this->SAbstractSignalSlotConnection::invocationLocker));
+			SMutexLocker locker(getInvocationLocker(slotTarget));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)

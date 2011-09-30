@@ -20,6 +20,26 @@ private:
 	ConnectionList connections;
 
 public:
+	virtual ~SSignal1()
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			//Notify to the slot that the signal is dying
+			(*it)->getTarget()->_signalDestroyed(this);
+
+			delete (*it);
+			it++;
+		}
+
+		connections.clear();
+	}
+
+
 	template <class SSlotType>
 	bool connect(SSlotType *slotTarget, void (SSlotType::*callableMethod)(arg1))
 	{

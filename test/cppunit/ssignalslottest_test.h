@@ -70,12 +70,14 @@ public:
 	void tearDown()
 	{
 		delete mySignal1;
-		delete mySignal1bis;
-		delete mySlot1;
-
 		mySignal1 = NULL;
+
+		delete mySignal1bis;
 		mySignal1bis = NULL;
+
+		delete mySlot1;
 		mySlot1 = NULL;
+
 
 		fflush(stdout);
 	}

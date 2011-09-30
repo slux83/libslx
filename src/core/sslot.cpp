@@ -16,7 +16,9 @@ SSlot::~SSlot()
 	for (std::set<internalS::SAbstractSignal*>::const_iterator it = connectedSignals.begin();
 		 it != connectedSignals.end(); it++)
 	{
-		(*it)->disconnectAll(this);
+		internalS::SAbstractSignal *signal = *it;
+		if (signal != NULL)
+			signal->disconnectAll(this);
 	}
 
 	connectedSignals.clear();

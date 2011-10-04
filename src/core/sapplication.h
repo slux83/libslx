@@ -20,6 +20,8 @@ class SSlot;
 	The getInstance() function must be invoked to get the singletone instance
 
 	\note all functions are thread-safe except init()
+
+	\todo we really need this shit?
 */
 class SApplication
 {
@@ -32,28 +34,12 @@ private:
 	//Constructor
 	explicit SApplication();
 
-	//! Mutex for slots
-	std::map<SSlot*, SMutex*> slotVsMutex;
-
-	//! Internal use mutex
-	SMutex ownLocker;
-
 public:
 	//! SApplication instance init. \reentrant This function isn't thread safe
 	static void init();
 
 	//! SApplication instance getter. \reentrant This function isn't thread safe
 	static SApplication* getInstance();
-
-	//! Get the unique mutex for the slotTarget instance
-	SMutex* _getSlotMutex(SSlot *slotTarget);
-
-	//! Register a new slot
-	void _registerSlot(SSlot *slotTarget);
-
-	//! Unregister a slot
-	void _unregisterSlot(SSlot *slotTarget);
-
 };
 
 #endif // SAPPLICATION_H

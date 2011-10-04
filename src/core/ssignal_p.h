@@ -33,11 +33,7 @@ namespace internalS
 
 	class SAbstractSignalSlotConnection
 	{
-	protected:
-		SMutex* getInvocationLocker(SSlot *slotTarget)
-		{
-			return SApplication::getInstance()->_getSlotMutex(slotTarget);
-		}
+
 	};
 
 	/*!
@@ -71,7 +67,7 @@ namespace internalS
 
 		virtual void fire()
 		{
-			SMutexLocker locker(getInvocationLocker(slotTarget));
+			SMutexLocker locker(&(slotTarget->_slotLocker));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
@@ -118,7 +114,7 @@ namespace internalS
 
 		virtual void fire(arg1 a1)
 		{
-			SMutexLocker locker(getInvocationLocker(slotTarget));
+			SMutexLocker locker(&(slotTarget->_slotLocker));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)

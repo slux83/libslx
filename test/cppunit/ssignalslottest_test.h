@@ -152,7 +152,6 @@ private:
 	SSignal1<unsigned int> *mySignal1bis;
 
 public:
-	SSignalSlotTest() {	SApplication::init(); }
 
 	void setUp()
 	{

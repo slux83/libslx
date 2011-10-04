@@ -7,8 +7,6 @@
 
 SSlot::SSlot()
 {
-	//Register the slot at application level
-	SApplication::getInstance()->_registerSlot(this);
 }
 
 SSlot::~SSlot()
@@ -22,9 +20,6 @@ SSlot::~SSlot()
 	}
 
 	connectedSignals.clear();
-
-	//Unregister the slot at application level
-	SApplication::getInstance()->_unregisterSlot(this);
 }
 void SSlot::_addConnectedSignal(internalS::SAbstractSignal *signal)
 {

@@ -16,10 +16,15 @@
 class SSlot
 {
 private:
+	//! Signals connected to this object
 	std::set<internalS::SAbstractSignal*> connectedSignals;
 
 public:
+	//! Mutex for slots invocations
+	SMutex _slotLocker;
+
     SSlot();
+
 	virtual ~SSlot();
 
 	void _addConnectedSignal(internalS::SAbstractSignal *signal);

@@ -11,6 +11,7 @@
 
 #include "../../src/core/ssignal.h"
 #include "../../src/concurrent/sthread.h"
+#include "../../src/core/stime.h"
 
 /*!
 	\brief Test Unit for Signal/Slot feature
@@ -20,6 +21,7 @@ class SSignalSlotTest : public CppUnit::TestFixture
 CPPUNIT_TEST_SUITE(SSignalSlotTest);
 CPPUNIT_TEST(testSingleThread);
 CPPUNIT_TEST(testMultiThread);
+CPPUNIT_TEST(testBenchmark);
 CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -211,7 +213,20 @@ public:
 
 		//Each thread calls the slot 10M times
 		CPPUNIT_ASSERT_EQUAL(mySlot1->slot1Counter, 20000000);
+	}
 
+	void testBenchmark()
+	{
+		//TODO
+		SSignal0 s0;
+
+		STimestamp t0 = STime::now();
+		for (int i=0; i<10000000; ++i)
+			s0.fire();
+
+		STimestamp diff = STime::diff(t0);
+
+		std::cout << "DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
 		fflush(stdout);
 	}
 };

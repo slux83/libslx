@@ -63,6 +63,9 @@ public:
 	{
 		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
 
+		if (connections.empty())
+			return;
+
 		ConnectionListConstIterator it = connections.begin();
 		ConnectionListConstIterator end = connections.end();
 

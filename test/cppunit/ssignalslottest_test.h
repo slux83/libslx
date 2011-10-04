@@ -68,6 +68,26 @@ private:
 	};
 
 	//Internal Slot class
+	class MySlotClass2 : public SSlot
+	{
+	public:
+		int globalVar;
+
+		MySlotClass2()  { globalVar = 0; }
+
+		void slot0(int a) { globalVar += a; }
+		void slot1(int a) { globalVar += a; }
+		void slot2(int a) { globalVar += a; }
+		void slot3(int a) { globalVar += a; }
+		void slot4(int a) { globalVar += a; }
+		void slot5(int a) { globalVar += a; }
+		void slot6(int a) { globalVar += a; }
+		void slot7(int a) { globalVar += a; }
+		void slot8(int a) { globalVar += a; }
+		void slot9(int a) { globalVar += a; }
+	};
+
+	//Internal Slot class
 	class MySlotClass1 : public SSlot
 	{
 	public:
@@ -218,15 +238,33 @@ public:
 	void testBenchmark()
 	{
 		//TODO
-		SSignal0 s0;
+		SSignal1<int> s1;
 
 		STimestamp t0 = STime::now();
 		for (int i=0; i<10000000; ++i)
-			s0.fire();
+			s1.fire(12);
 
 		STimestamp diff = STime::diff(t0);
 
-		std::cout << "DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
+		std::cout << std::endl << "1. DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
+		fflush(stdout);
+
+		MySlotClass2 msc2;
+
+		s1.connect(&msc2, &MySlotClass2::slot0);
+		s1.connect(&msc2, &MySlotClass2::slot1);
+		s1.connect(&msc2, &MySlotClass2::slot2);
+		s1.connect(&msc2, &MySlotClass2::slot3);
+		s1.connect(&msc2, &MySlotClass2::slot4);
+
+		t0 = STime::now();
+
+		for (int i=0; i<10000000; ++i)
+			s1.fire(1);
+
+		diff = STime::diff(t0);
+
+		std::cout << std::endl << "2. DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
 		fflush(stdout);
 	}
 };

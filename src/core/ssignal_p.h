@@ -67,7 +67,7 @@ namespace internalS
 
 		virtual void fire()
 		{
-			SMutexLocker locker(&(slotTarget->_slotLocker));
+			SMutexLocker locker(&(slotTarget->slotCallbackLock));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
@@ -114,7 +114,7 @@ namespace internalS
 
 		virtual void fire(arg1 a1)
 		{
-			SMutexLocker locker(&(slotTarget->_slotLocker));
+			SMutexLocker locker(&(slotTarget->slotCallbackLock));
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)

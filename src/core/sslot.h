@@ -20,8 +20,8 @@ private:
 	std::set<internalS::SAbstractSignal*> connectedSignals;
 
 public:
-	//! Mutex for slots invocations
-	SMutex _slotLocker;
+	//! Mutex for slots invocations. It can be user by subclasses too
+	SMutex slotCallbackLock;
 
     SSlot();
 

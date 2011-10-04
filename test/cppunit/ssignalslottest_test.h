@@ -265,6 +265,22 @@ public:
 
 		std::cout << std::endl << "2. DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
 		fflush(stdout);
+
+		s1.connect(&msc2, &MySlotClass2::slot5);
+		s1.connect(&msc2, &MySlotClass2::slot6);
+		s1.connect(&msc2, &MySlotClass2::slot7);
+		s1.connect(&msc2, &MySlotClass2::slot8);
+		s1.connect(&msc2, &MySlotClass2::slot9);
+
+		t0 = STime::now();
+
+		for (int i=0; i<10000000; ++i)
+			s1.fire(1);
+
+		diff = STime::diff(t0);
+
+		std::cout << std::endl << "3. DIFF: sec=" << diff.sec << " usec=" << diff.usec << std::endl;
+		fflush(stdout);
 	}
 };
 

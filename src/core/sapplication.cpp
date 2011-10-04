@@ -16,7 +16,8 @@ SApplication::SApplication()
 
 void SApplication::init()
 {
-	S_ASSERT_MSG(instance == NULL, "SApplication::init() instance already initialized");
+	if (instance != NULL)
+		return;
 
 	if (instance == NULL)
 		instance = new SApplication();

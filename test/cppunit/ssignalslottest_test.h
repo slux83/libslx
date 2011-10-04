@@ -10,6 +10,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "../../src/core/ssignal.h"
+#include "../../src/concurrent/sthread.h"
 
 /*!
 	\brief Test Unit for Signal/Slot feature
@@ -17,35 +18,109 @@
 class SSignalSlotTest : public CppUnit::TestFixture
 {
 CPPUNIT_TEST_SUITE(SSignalSlotTest);
-CPPUNIT_TEST(testConnections);
+CPPUNIT_TEST(testSingleThread);
+CPPUNIT_TEST(testMultiThread);
 CPPUNIT_TEST_SUITE_END();
 
 private:
+
+	class MyThread1 : public SThread
+	{
+	private:
+		SSignal1<unsigned int> *s1;
+
+	public:
+		MyThread1(SSignal1<unsigned int> *_s1)
+		{
+			s1 = _s1;
+		}
+
+	protected:
+		void run()
+		{
+			for (unsigned int i=0; i< 10000000; ++i)
+				s1->fire(i);
+		}
+
+	};
+
+	//
+	class MyThread2 : public SThread
+	{
+	private:
+		SSignal1<const char*> *s1;
+
+	public:
+		MyThread2(SSignal1<const char*> *_s1)
+		{
+			s1 = _s1;
+		}
+
+	protected:
+		void run()
+		{
+			for (unsigned int i=0; i< 10000000; ++i)
+				s1->fire("hello");
+		}
+
+	};
+
 	//Internal Slot class
 	class MySlotClass1 : public SSlot
 	{
 	public:
+		int slot0Counter;
+		int slot0bisCounter;
+		int slot1Counter;
+
+		MySlotClass1()
+		{
+			slot0Counter = 0;
+			slot0bisCounter = 0;
+			slot1Counter = 0;
+		}
+
+		void resetCounters()
+		{
+			slot0Counter = 0;
+			slot0bisCounter = 0;
+			slot1Counter = 0;
+		}
+
 		void mySlot0()
 		{
+			slot0Counter++;
+#if 0
 			std::cout << "MySlotClass1::mySlot0()" << std::endl;
+#endif
 		}
 
 		void mySlot0bis()
 		{
+			slot0bisCounter++;
+#if 0
 			std::cout << "MySlotClass1::mySlot0bis()" << std::endl;
+#endif
 		}
 
 		void mySlot1(const char* arg1)
 		{
+			slot1Counter++;
+#if 0
 			std::cout << "MySlotClass1::mySlot1(const char* arg1='" << arg1
 					  << "')" << std::endl;
+#endif
 		}
 
 		//Overload
 		void mySlot1(unsigned int arg1)
 		{
+			slot1Counter++;
+#if 0
+
 			std::cout << "MySlotClass1::mySlot1(unsigned int arg1=" << arg1
 					  << ")" << std::endl;
+#endif
 		}
 	};
 
@@ -55,16 +130,27 @@ private:
 	SSignal1<unsigned int> *mySignal1bis;
 
 public:
-	SSignalSlotTest()
-	{
-		SApplication::init();
-	}
+	SSignalSlotTest() {	SApplication::init(); }
 
 	void setUp()
 	{
 		mySignal1 = new SSignal1<const char*>();
 		mySignal1bis = new SSignal1<unsigned int>();
 		mySlot1 = new MySlotClass1();
+
+		bool connectionEsite = false;
+
+		connectionEsite = mySignal0.connect(mySlot1, &MySlotClass1::mySlot0);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+
+		connectionEsite = mySignal0.connect(mySlot1, &MySlotClass1::mySlot0bis);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+
+		connectionEsite = mySignal1->connect(mySlot1, &MySlotClass1::mySlot1);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+
+		connectionEsite = mySignal1bis->connect(mySlot1, &MySlotClass1::mySlot1);
+		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
 	}
 
 	void tearDown()
@@ -82,18 +168,10 @@ public:
 		fflush(stdout);
 	}
 
-	void testConnections()
+	void testSingleThread()
 	{
-		bool connectionEsite = false;
-
-		connectionEsite = mySignal0.connect(mySlot1, &MySlotClass1::mySlot0);
-		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
-
-		connectionEsite = mySignal1->connect(mySlot1, &MySlotClass1::mySlot1);
-		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
-
-		connectionEsite = mySignal1bis->connect(mySlot1, &MySlotClass1::mySlot1);
-		CPPUNIT_ASSERT_EQUAL(connectionEsite, true);
+		//Reset counters
+		mySlot1->resetCounters();
 
 		mySignal0.fire();	//as invocation
 		mySignal0();		//as functor
@@ -108,6 +186,33 @@ public:
 
 		//Test overflow
 		mySignal1bis->fire(-1);
+
+		CPPUNIT_ASSERT_EQUAL(mySlot1->slot0Counter, 2);
+		CPPUNIT_ASSERT_EQUAL(mySlot1->slot0bisCounter, 2);
+		CPPUNIT_ASSERT_EQUAL(mySlot1->slot1Counter, 5);
+	}
+
+	void testMultiThread()
+	{
+		//Reset counters
+		mySlot1->resetCounters();
+
+		//Create stress threads
+		MyThread1 mt1(mySignal1bis);
+		MyThread2 mt2(mySignal1);
+
+		//Run the test
+		mt1.start();
+		mt2.start();
+
+		//Wait...
+		mt1.join();
+		mt2.join();
+
+		//Each thread calls the slot 10M times
+		CPPUNIT_ASSERT_EQUAL(mySlot1->slot1Counter, 20000000);
+
+		fflush(stdout);
 	}
 };
 

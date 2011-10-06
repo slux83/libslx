@@ -33,6 +33,9 @@ public:
 
 	//! Unlock the mutex
 	void unlock();
+
+	//! \return the lock status of the mutex
+	inline bool isLocked() { return !alreadyUnlocked; }
 };
 
 #endif // SMUTEXLOCKER_H

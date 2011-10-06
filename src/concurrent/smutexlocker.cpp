@@ -9,26 +9,29 @@
 
 SMutexLocker::SMutexLocker(SMutex *mutex)
 {
-    S_ASSERT(mutex != NULL);
+	if (mutex)
+	{
+		this->mutex = mutex;
+		alreadyUnlocked = false;
 
-    this->mutex = mutex;
-	alreadyUnlocked  = false;
-
-    this->mutex->lock();
+		this->mutex->lock();
+	}
 }
 
 SMutexLocker::~SMutexLocker()
 {
-    S_ASSERT(mutex != NULL);
-
-	if (!alreadyUnlocked)
-		mutex->unlock();
+	if (mutex)
+	{
+		if (!alreadyUnlocked)
+			mutex->unlock();
+	}
 }
 
 void SMutexLocker::unlock()
 {
-	S_ASSERT(mutex != NULL);
-
-	if (!alreadyUnlocked)
-		mutex->unlock();
+	if (mutex)
+	{
+		if (!alreadyUnlocked)
+			mutex->unlock();
+	}
 }

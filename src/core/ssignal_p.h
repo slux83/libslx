@@ -10,8 +10,18 @@
 #include "../concurrent/smutex.h"
 #include "../concurrent/smutexlocker.h"
 #include "sapplication.h"
+#include "spolicy.h"
 
 class SSlot;
+
+enum SSignalFlag
+{
+	SSignalFlagThreadSafe = 0x1,
+	SSignalFlagThreadUnsafe = 0x2,
+
+	SSignalFlagSyncConnection = 0x4,
+	SSignalFlagAsyncConnection = 0x8
+};
 
 namespace internalS
 {
@@ -23,12 +33,24 @@ namespace internalS
 	protected:
 		SMutex signalMutex;
 
+		SSignalFlag flags;
+
 	public:
 		/*! Disconnect all slots of the slotTarget argument from this signal.
 			Used when the slot object is destroyed
 		*/
 		virtual void disconnectAll(SSlot *slotTarget) = 0;
 
+		/*!
+			Constructor.
+			\param SSignalFlag flags. It accepts also a combination of OR
+
+			Default: (SSignalFlagThreadSafe | SSignalFlagSyncConnection)
+		*/
+		explicit SAbstractSignal(int signalFlags = SSignalFlagThreadSafe | SSignalFlagSyncConnection)
+		{
+			flags = (SSignalFlag) signalFlags;
+		}
 	};
 
 	class SAbstractSignalSlotConnection
@@ -57,17 +79,19 @@ namespace internalS
 	private:
 		SSlotType *slotTarget;
 		CallableMethod callableMethod;
+		SSignalFlag flags;
 
 	public:
-		explicit SSignalSlotConnection0(SSlotType *target, CallableMethod callable)
+		explicit SSignalSlotConnection0(SSlotType *target, CallableMethod callable, SSignalFlag signalFlags)
 		{
 			slotTarget = target;
 			callableMethod = callable;
+			flags = signalFlags;
 		}
 
 		virtual void fire()
 		{
-			SMutexLocker locker(&(slotTarget->slotCallbackLock));
+			SMutexLocker locker((flags & SSignalFlagThreadSafe)? &(slotTarget->slotCallbackLock) : NULL);
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)
@@ -104,17 +128,19 @@ namespace internalS
 	private:
 		SSlotType *slotTarget;
 		CallableMethod callableMethod;
+		SSignalFlag flags;
 
 	public:
-		explicit SSignalSlotConnection1(SSlotType *target, CallableMethod callable)
+		explicit SSignalSlotConnection1(SSlotType *target, CallableMethod callable, SSignalFlag signalFlags)
 		{
 			slotTarget = target;
 			callableMethod = callable;
+			flags = signalFlags;
 		}
 
 		virtual void fire(arg1 a1)
 		{
-			SMutexLocker locker(&(slotTarget->slotCallbackLock));
+			SMutexLocker locker((flags & SSignalFlagThreadSafe)? &(slotTarget->slotCallbackLock) : NULL);
 			S_USE_VAR(locker);
 
 			if (slotTarget != NULL)

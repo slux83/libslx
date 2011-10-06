@@ -7,6 +7,6 @@
 #define SPOLICY_H
 
 #include "../global/sglobal.h"
-#include "../core/sapplication.h"
+#include "sapplication.h"
 
 #endif // SPOLICY_H

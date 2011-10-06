@@ -20,6 +20,11 @@ private:
 
 public:
 
+	explicit SSignal0(int signalFlags = SSignalFlagThreadSafe | SSignalFlagSyncConnection)
+		: internalS::SAbstractSignal(signalFlags)
+	{
+	}
+
 	virtual ~SSignal0()
 	{
 		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
@@ -51,7 +56,7 @@ public:
 		}
 
 		internalS::SSignalSlotConnection0<SSlotType> *conn =
-				new internalS::SSignalSlotConnection0<SSlotType> (slotTarget, callableMethod);
+				new internalS::SSignalSlotConnection0<SSlotType> (slotTarget, callableMethod, flags);
 		connections.push_back(conn);
 		dynamic_cast<SSlot*>(slotTarget)->_addConnectedSignal(this);
 

@@ -3,6 +3,7 @@
 [FILE_HEADER_END]
 ******************************************************************************/
 
+#include <iostream>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TestResult.h>

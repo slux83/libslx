@@ -26,6 +26,23 @@ public:
 };
 
 /*!
+	\brief Hight resolution timer
+	The same as STimestamp but with time precision in nanoseconds
+*/
+class STimeHighRes
+{
+public:
+	STimeHighRes()
+	{
+		sec = 0;
+		nsec = 0;
+	}
+
+	unsigned long sec;
+	unsigned long nsec;
+};
+
+/*!
 	\brief Time class
 */
 class STime

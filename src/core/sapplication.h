@@ -40,6 +40,12 @@ public:
 
 	//! SApplication instance getter. \reentrant This function isn't thread safe
 	static SApplication* getInstance();
+
+	/*! SApplication starter fucntion.
+		This function starts the signal/slot thread pool for asynchronous connections
+		\reentrant This function isn't thread safe
+	*/
+	void start();
 };
 
 #endif // SAPPLICATION_H

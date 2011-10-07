@@ -9,6 +9,7 @@
 #include <list>
 #include "ssignal_p.h"
 #include "sslot.h"
+#include "ssignalcall.h"
 
 class SSignal0 : public internalS::SAbstractSignal
 {
@@ -69,6 +70,14 @@ public:
 
 		if (connections.empty())
 			return;
+
+		//Async call?
+		if (flags & SSignalFlagAsyncConnection)
+		{
+			internalS::SSignalCall sc(this);
+			// TODO
+			return;
+		}
 
 		ConnectionListConstIterator it = connections.begin();
 		ConnectionListConstIterator end = connections.end();

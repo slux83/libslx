@@ -16,8 +16,7 @@ SApplication::SApplication()
 
 void SApplication::init()
 {
-	if (instance != NULL)
-		return;
+	S_ASSERT_MSG(instance == NULL, "SApplication::getInstance() instance already initialized");
 
 	if (instance == NULL)
 		instance = new SApplication();
@@ -30,3 +29,7 @@ SApplication* SApplication::getInstance()
 	return instance;
 }
 
+void SApplication::start()
+{
+	//TODO
+}

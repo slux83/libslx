@@ -14,10 +14,14 @@
 template<typename T> class SAbstractBlockingQueue
 {
 public:
+	//! Destructor
+	virtual ~SAbstractBlockingQueue() {}
+
 	/*! Enqueue the passed element to the end of the queue
 		\param T Element to push back
+		\return the esite of this operation (some implementation - for example fixed queue - could return false)
 	*/
-	virtual void enqueue(const T &t) = 0;
+	virtual bool enqueue(const T &t) = 0;
 
 	/*!
 		\return true if the queue is empty, false otherwise

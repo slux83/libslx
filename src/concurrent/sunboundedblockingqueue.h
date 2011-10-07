@@ -47,8 +47,9 @@ public:
 
 	/*! Enqueue the passed element to the end of the queue
 		\param T Element to push back
+		\return always TRUE
 	*/
-	inline void enqueue(const T &t)
+	inline bool enqueue(const T &t)
 	{
 		SMutexLocker locker(&waitConditionLocker);
 		S_USE_VAR(locker);
@@ -56,6 +57,8 @@ public:
 		queue.push_back(t);
 
 		waitBlockingQueueAccess.wakeupOne();
+
+		return true;
 	}
 
 	/*!

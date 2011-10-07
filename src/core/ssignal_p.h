@@ -41,6 +41,9 @@ namespace internalS
 		SSignalFlag flags;
 
 	public:
+		//! Destructor
+		virtual ~SAbstractSignal() {}
+
 		/*! Disconnect all slots of the slotTarget argument from this signal.
 			Used when the slot object is destroyed
 		*/
@@ -89,6 +92,10 @@ namespace internalS
 	class SAbstractSignalSlotConnection
 	{
 
+	public:
+		//! Destructor
+		virtual ~SAbstractSignalSlotConnection() {}
+
 	};
 
 	/*!
@@ -97,6 +104,9 @@ namespace internalS
 	class SAbstractSignalSlotConnection0 : public SAbstractSignalSlotConnection
 	{
 	public:
+		//! Destructor
+		virtual ~SAbstractSignalSlotConnection0() {}
+
 		virtual void fire() = 0;
 		virtual SSlot* getTarget() = 0;
 	};

@@ -77,7 +77,7 @@ public:
 		if (flags & SSignalFlagAsyncConnection)
 		{
 			internalS::SSignalCall sc(this);
-			// TODO
+			sc.addArgument(a1, 0);
 			return;
 		}
 

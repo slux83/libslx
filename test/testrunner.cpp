@@ -11,7 +11,6 @@
 #include <cppunit/Test.h>
 #include <cppunit/TestFailure.h>
 #include "../src/core/sapplication.h"
-#include "../src/core/svariant.h"
 
 /*
 	Test Runner main function

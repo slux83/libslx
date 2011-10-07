@@ -70,6 +70,17 @@ public:
 
 		CPPUNIT_ASSERT_EQUAL(strncmp(test4, "hello world 666", 64), 0);
 		CPPUNIT_ASSERT_EQUAL(v4.isTypeOf<const char*>(), false);
+
+		//Test copy and assignment operator
+		SVariant t1(100);
+		SVariant t2 = t1;	//copy constructor
+
+		CPPUNIT_ASSERT_EQUAL((int)t1, (int)t2);
+
+		SVariant t3(3.14);
+		t2 = t3;			//assignment operator
+
+		CPPUNIT_ASSERT_DOUBLES_EQUAL((double)t2, (double)t3, 0.000001);
 	}
 
 };

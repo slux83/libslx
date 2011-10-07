@@ -9,16 +9,33 @@
 #include <cstring>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../src/core/svariant.h"
+#include "../../src/core/ssignalcall.h"
 
 /*!
-	\brief Test Unit for SWaitCondition object
+	\brief Test Unit for SVariant and internalS::SSignalCall object
 */
 class SVariantTest : public CppUnit::TestFixture
 {
 CPPUNIT_TEST_SUITE(SVariantTest);
 CPPUNIT_TEST(testVariant);
+CPPUNIT_TEST(testSignalCall);
 CPPUNIT_TEST_SUITE_END();
+
+private:
+	//Test Type
+	typedef struct
+	{
+		int i;
+		bool b;
+		double d;
+	} MyPrivateStruct;
+
+	//Test Type
+	class MyPrivateClass
+	{
+	public:
+		std::string name;
+	};
 
 public:
 	void setUp()
@@ -81,6 +98,47 @@ public:
 		t2 = t3;			//assignment operator
 
 		CPPUNIT_ASSERT_DOUBLES_EQUAL((double)t2, (double)t3, 0.000001);
+	}
+
+	void testSignalCall()
+	{
+
+
+		SVariant arg0(666);
+		SVariant arg1(std::string("Hello"));
+		SVariant arg2(true);
+
+		MyPrivateStruct mps;
+		mps.b = true;
+		mps.i = 1024;
+		mps.d = 3.14;
+		SVariant arg3(mps);
+
+		MyPrivateClass mpc;
+		mpc.name = "MyPrivateClass";
+		SVariant arg4(mpc);
+
+		//Constructor argument is a fake object. NEVER USE IT!
+		internalS::SSignalCall call(reinterpret_cast<internalS::SAbstractSignal*>(new int()));
+
+		call.addArgument(arg0, 0);
+		call.addArgument(arg1, 1);
+		call.addArgument(arg2, 2);
+		call.addArgument(arg3, 3);
+		call.addArgument(arg4, 4);
+
+		int _arg0 = call.getArgument(0);
+		std::string _arg1 = call.getArgument(1);
+		bool _arg2 = call.getArgument(2);
+		MyPrivateStruct _arg3 = call.getArgument(3);
+		MyPrivateClass _arg4 = call.getArgument(4);
+
+		CPPUNIT_ASSERT_EQUAL(_arg0, 666);
+		CPPUNIT_ASSERT_EQUAL(_arg1, std::string("Hello"));
+		CPPUNIT_ASSERT_EQUAL(_arg2, true);
+		CPPUNIT_ASSERT_DOUBLES_EQUAL(_arg3.d, 3.14, 0.000001);
+		CPPUNIT_ASSERT_EQUAL(_arg4.name, std::string("MyPrivateClass"));
+
 	}
 
 };

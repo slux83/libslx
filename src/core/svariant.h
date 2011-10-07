@@ -72,13 +72,13 @@ public:
 		\example SVariant variant(100); SVariant variant(std::string("hello")); SVariant variant(3.14);
 	*/
 	template <typename VariantType>
-	explicit SVariant(VariantType value)
+	SVariant(VariantType value)
 	{
 		data =  new internalS::SVariantImpl<VariantType>(value);
 	}
 
 	//! Constructor
-	explicit SVariant() : data(NULL) {}
+	SVariant() : data(NULL) {}
 
 	//! Copy Constructor
 	SVariant(const SVariant &right)

@@ -6,7 +6,7 @@
 #ifndef SSIGNALCALL_H
 #define SSIGNALCALL_H
 
-#include <vector>
+#include <map>
 #include "ssignal_p.h"
 #include "svariant.h"
 
@@ -26,7 +26,7 @@ namespace internalS
 		internalS::SAbstractSignal *signal;
 
 		//! the arguments
-		std::vector<SVariant> arguments;
+		std::map<int, SVariant> arguments;
 
 	public:
 		/*! Constructor.
@@ -46,7 +46,15 @@ namespace internalS
 		template <typename T>
 		void addArgument(T value, int index)
 		{
-			arguments[index] = SVariant(value);
+			arguments.insert(std::make_pair(index, SVariant(value)));
+		}
+
+		/*!
+			\overload
+		*/
+		void addArgument(const SVariant &value, int index)
+		{
+			arguments.insert(std::make_pair(index, value));
 		}
 
 		/*!
@@ -55,12 +63,12 @@ namespace internalS
 			\return the SVariant representing the argument value
 			\sa addArgument
 		*/
-		SVariant getArgument(unsigned int index) const
+		SVariant getArgument(int index) const
 		{
-			S_ASSERT_MSG(index >=0 && index < arguments.size(),
-						 "SSignalCall::getArgument(int) index out of bound");
+			S_ASSERT_MSG(arguments.find(index) != arguments.end(),
+						 "SSignalCall::getArgument(int) index not found");
 
-			return arguments[index];
+			return arguments.at(index);
 		}
 
 		//! Getter for signal

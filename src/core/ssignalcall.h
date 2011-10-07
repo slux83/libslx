@@ -6,12 +6,12 @@
 #ifndef SSIGNALCALL_H
 #define SSIGNALCALL_H
 
+#include <vector>
 #include "ssignal_p.h"
+#include "svariant.h"
 
 namespace internalS
 {
-
-
 	/*!
 		\brief Signal call for async invocations
 	 */
@@ -20,12 +20,23 @@ namespace internalS
 
 	private:
 		internalS::SAbstractSignal *signal;
+		std::vector<SVariant> arguments;
 
 	public:
-
 		explicit SSignalCall(SAbstractSignal *signalSource)
 		{
 			signal = signalSource;
+		}
+
+		/*!
+			Add an argument (as SVariant)
+			\param value - the value of the argument
+			\param index - position of the argument in the invocation chain
+		*/
+		template <typename T>
+		void addArgument(T value, int index)
+		{
+			arguments[index] = SVariant(value);
 		}
 	};
 }

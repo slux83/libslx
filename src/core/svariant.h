@@ -58,7 +58,9 @@ public:
 
 	virtual ~SVariant()
 	{
-		delete data;
+		if (data != NULL)
+			delete data;
+
 		data = NULL;
 	}
 
@@ -70,6 +72,8 @@ public:
 	template <typename VariantType>
 	operator VariantType () const
 	{
+		S_ASSERT_MSG(data != NULL, "SVariant: NULL internal data");
+
 		//We try to cast the internal data variant with VariantType
 		internalS::SVariantImpl<VariantType> *base = dynamic_cast< internalS::SVariantImpl<VariantType>* >(data);
 
@@ -81,11 +85,14 @@ public:
 
 	/*!
 		Use this function to test if this variant can be stored in a variable of the same type of \b tester
-		\return true on success, false otherwise
+		\return true on success, false otherwise. Return false if the internal data is NULL
 	*/
 	template <typename VariantType>
 	bool isTypeOf()
 	{
+		if (data == NULL)
+			return false;
+
 		return typeid(*data) == typeid(internalS::SVariantImpl<VariantType>);
 	}
 

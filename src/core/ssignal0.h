@@ -75,7 +75,8 @@ public:
 		if (flags & SSignalFlagAsyncConnection)
 		{
 			internalS::SSignalCall sc(this);
-			// TODO
+			SApplication::getInstance()->addAsyncCall(sc);
+
 			return;
 		}
 

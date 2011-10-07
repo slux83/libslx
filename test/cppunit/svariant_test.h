@@ -139,6 +139,15 @@ public:
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(_arg3.d, 3.14, 0.000001);
 		CPPUNIT_ASSERT_EQUAL(_arg4.name, std::string("MyPrivateClass"));
 
+		//test copy & assignment
+		internalS::SSignalCall copy = call;
+		internalS::SSignalCall assignment;
+
+		assignment = copy;
+
+		CPPUNIT_ASSERT_EQUAL(((int)copy.getArgument(0)), ((int)call.getArgument(0)));
+		CPPUNIT_ASSERT_EQUAL(((bool)assignment.getArgument(2)), ((bool)copy.getArgument(2)));
+
 	}
 
 };

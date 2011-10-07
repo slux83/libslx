@@ -78,6 +78,8 @@ public:
 		{
 			internalS::SSignalCall sc(this);
 			sc.addArgument(a1, 0);
+			SApplication::getInstance()->addAsyncCall(sc);
+
 			return;
 		}
 

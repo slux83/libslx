@@ -7,11 +7,15 @@
 #define SAPPLICATION_H
 
 #include "../global/sglobal.h"
-#include "../concurrent/smutex.h"
+#include "../concurrent/sunboundedblockingqueue.h"
 #include <map>
 
 class SAbstractSignalSlotConnection;
 class SSlot;
+namespace internalS
+{
+	class SSignalCall;
+}
 
 /*!
 	\brief Global application instance
@@ -30,6 +34,9 @@ protected:
 	//! Singleton instance
 	static SApplication *instance;
 
+	//! Blocking queue for async signal invocations
+	SUnboundedBlockingQueue<internalS::SSignalCall> signalAsincCall;
+
 private:
 	//Constructor
 	explicit SApplication();
@@ -46,6 +53,9 @@ public:
 		\reentrant This function isn't thread safe
 	*/
 	void start();
+
+	//! Enqueue call into the invocation queue
+	void addAsyncCall(const internalS::SSignalCall &call);
 };
 
 #endif // SAPPLICATION_H

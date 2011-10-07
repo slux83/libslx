@@ -7,6 +7,7 @@
 #include "../concurrent/smutex.h"
 #include "../concurrent/smutexlocker.h"
 #include "ssignal_p.h"
+#include "ssignalcall.h"
 
 SApplication* SApplication::instance = NULL;
 
@@ -32,4 +33,9 @@ SApplication* SApplication::getInstance()
 void SApplication::start()
 {
 	//TODO
+}
+
+void SApplication::addAsyncCall(const internalS::SSignalCall &call)
+{
+	signalAsincCall.enqueue(call);
 }

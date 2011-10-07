@@ -32,10 +32,22 @@ namespace internalS
 		/*! Constructor.
 			\param signalSource
 		*/
-		explicit SSignalCall(SAbstractSignal *signalSource)
+		SSignalCall(SAbstractSignal *signalSource)
 		{
 			S_ASSERT(signalSource != NULL);
 			signal = signalSource;
+		}
+
+		//! Copy constructor
+		SSignalCall(const SSignalCall &right)
+		{
+			signal = right.signal;
+			arguments = right.arguments;
+		}
+
+		SSignalCall()
+		{
+			signal = NULL;
 		}
 
 		/*!
@@ -75,6 +87,18 @@ namespace internalS
 		internalS::SAbstractSignal* getSignalSource()
 		{
 			return signal;
+		}
+
+		//! Assignment operator
+		SSignalCall& operator= (const SSignalCall &right)
+		{
+			if (this == &right)
+				return *this;
+
+			signal = right.signal;
+			arguments = right.arguments;
+
+			return *this;
 		}
 	};
 }

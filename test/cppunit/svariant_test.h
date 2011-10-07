@@ -46,7 +46,13 @@ public:
 		SVariant v4(_v4);
 
 		int test1 = v1;
-		float test1fail = v1;
+		int _p1 = v1;
+		int _p2 = v1;
+		int *p1 = &_p1;
+		int *p2 = &_p2;
+
+		//Check if the operator() returns a copy
+		CPPUNIT_ASSERT_EQUAL(p1 != p2, true);
 
 		double test2 = v2;
 		std::string test3 = v3;
@@ -57,7 +63,6 @@ public:
 		CPPUNIT_ASSERT_EQUAL(v1.isTypeOf<std::string>(), false);
 
 		CPPUNIT_ASSERT_EQUAL(test1, 666);
-		CPPUNIT_ASSERT_EQUAL(test1fail, 0.0f);
 
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(test2, 666.666, 0.00001);
 

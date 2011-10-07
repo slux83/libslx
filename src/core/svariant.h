@@ -7,6 +7,7 @@
 #define SVARIANT_H
 
 #include <typeinfo>
+#include <string>
 #include "../global/sglobal.h"
 
 /*!
@@ -63,7 +64,7 @@ public:
 
 	/*!
 		Get row data copy
-		\return the \b copy of internal data or the default generic value on error
+		\return the \b copy of internal data or an application assert
 		\sa isTypeOf()
 	*/
 	template <typename VariantType>
@@ -73,31 +74,7 @@ public:
 		internalS::SVariantImpl<VariantType> *base = dynamic_cast< internalS::SVariantImpl<VariantType>* >(data);
 
 		//Fail?
-		if (base == NULL)
-		{
-			return VariantType();
-		}
-
-		return base->data;
-	}
-
-
-	/*!
-		Get row data reference
-		\return the \b reference of internal data or the default generic value on error
-		\sa isTypeOf()
-	*/
-	template <typename VariantType>
-	const VariantType & getData() const
-	{
-		//We try to cast the internal data variant with VariantType
-		internalS::SVariantImpl<VariantType> *base = dynamic_cast< internalS::SVariantImpl<VariantType>* >(data);
-
-		//Fail?
-		if (base == NULL)
-		{
-			return VariantType();
-		}
+		S_ASSERT_MSG(base != NULL, "SVariant: incompatible type cast.");
 
 		return base->data;
 	}

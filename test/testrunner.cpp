@@ -11,6 +11,7 @@
 #include <cppunit/Test.h>
 #include <cppunit/TestFailure.h>
 #include "../src/core/sapplication.h"
+#include "../src/core/svariant.h"
 
 /*
 	Test Runner main function
@@ -30,6 +31,6 @@ int main (int /*argc*/, char** /*argv*/)
 	resultController.addListener(&progressListner);
 
 	runner.addTest(registry.makeTest());
-	runner.run(resultController);
+	runner.run(/*resultController*/);
 	return 0;
 }

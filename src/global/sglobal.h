@@ -23,7 +23,7 @@ typedef enum
 } SMsgLevel;
 
 /*!
-    Calls the message handler with the fatal debug message \a msg. If no
+	Calls the message handler with the debug message \a msg. If no
     message handler has been installed, the message is printed to
     stderr.
 
@@ -37,7 +37,7 @@ void sDebug(const char *msg, ...);
 
 
 /*!
-    Calls the message handler with the fatal debug message \a msg. If no
+	Calls the message handler with the warning debug message \a msg. If no
     message handler has been installed, the message is printed to
     stderr.
 
@@ -51,7 +51,7 @@ void sWarning(const char *msg, ...);
 
 
 /*!
-    Calls the message handler with the fatal debug message \a msg. If no
+	Calls the message handler with the critical debug message \a msg. If no
     message handler has been installed, the message is printed to
     stderr.
 

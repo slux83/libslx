@@ -11,11 +11,6 @@
 namespace internalS
 {
 
-	/*!
-		\brief Generic Signal arguments container
-		FUCK, we need a typelist here!
-	*/
-
 
 	/*!
 		\brief Signal call for async invocations

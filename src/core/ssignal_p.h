@@ -23,6 +23,9 @@ enum SSignalFlag
 	SSignalFlagAsyncConnection = 0x8
 };
 
+/*!
+	\namespace internal stuff
+*/
 namespace internalS
 {
 	/*!

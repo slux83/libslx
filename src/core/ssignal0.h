@@ -110,6 +110,11 @@ public:
 				it++;
 		}
 	}
+
+	virtual void asyncExec(const std::map<int, SVariant> &/*args*/)
+	{
+		fire();	//SSignal0 has no args
+	}
 };
 
 #endif // SSIGNAL0_H

@@ -13,6 +13,7 @@
 #include "spolicy.h"
 
 class SSlot;
+class SVariant;
 
 enum SSignalFlag
 {
@@ -87,6 +88,8 @@ namespace internalS
 
 			flags = (SSignalFlag) signalFlags;
 		}
+
+		virtual void asyncExec(const std::map<int, SVariant> &args) = 0;
 	};
 
 	class SAbstractSignalSlotConnection

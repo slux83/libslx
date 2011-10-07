@@ -113,6 +113,12 @@ public:
 				it++;
 		}
 	}
+
+	virtual void asyncExec(const std::map<int, SVariant> &args)
+	{
+		S_ASSERT_MSG(args.size() == 1, "SSignal1::asyncExec(...) invalid argument size");
+		fire((arg1)args.at(0));
+	}
 };
 
 #endif // SSIGNAL1_H

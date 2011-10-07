@@ -100,6 +100,13 @@ namespace internalS
 
 			return *this;
 		}
+
+		//! Execute this call
+		void invoke()
+		{
+			S_ASSERT_MSG(signal != NULL, "SSignalCall::invoke() NULL signal");
+			signal->asyncExec(arguments);
+		}
 	};
 }
 

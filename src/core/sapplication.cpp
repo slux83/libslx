@@ -4,6 +4,7 @@
 ******************************************************************************/
 
 #include "sapplication.h"
+#include "sapplication_p.h"
 #include "../concurrent/smutex.h"
 #include "../concurrent/smutexlocker.h"
 #include "ssignal_p.h"
@@ -13,6 +14,8 @@ SApplication* SApplication::instance = NULL;
 
 SApplication::SApplication()
 {
+	threadPool = new SFixedThreadPool(new internalS::SApplicationThreadFactory(),
+									  APPLICATION_EXECUTOR_THREAD_POOL_SIZE);
 }
 
 void SApplication::init()
@@ -32,10 +35,15 @@ SApplication* SApplication::getInstance()
 
 void SApplication::start()
 {
-	//TODO
+	threadPool->start();
 }
 
 void SApplication::addAsyncCall(const internalS::SSignalCall &call)
 {
 	signalAsincCall.enqueue(call);
+}
+
+internalS::SSignalCall SApplication::takeAsyncCall()
+{
+	return signalAsincCall.dequeue();
 }

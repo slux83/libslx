@@ -117,6 +117,10 @@ void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 
 #define S_USE_VAR(x) (void)(x)
 
+#define S_FOREVER while (true)
+
+#define APPLICATION_EXECUTOR_THREAD_POOL_SIZE 4
+
 template <typename T> inline const T & sMin(const T &x, const T &y) { if (x < y) return x; return y; }
 template <typename T> inline const T & sMax(const T &x, const T &y) { if (x < y) return y; return x; }
 

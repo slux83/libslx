@@ -8,6 +8,7 @@
 
 #include "../global/sglobal.h"
 #include "../concurrent/sunboundedblockingqueue.h"
+#include "../concurrent/sfixedthreadpool.h"
 #include <map>
 
 class SAbstractSignalSlotConnection;
@@ -37,6 +38,9 @@ protected:
 	//! Blocking queue for async signal invocations
 	SUnboundedBlockingQueue<internalS::SSignalCall> signalAsincCall;
 
+	//! Executors thread pool
+	SAbstractThreadPool *threadPool;
+
 private:
 	//Constructor
 	explicit SApplication();
@@ -56,6 +60,9 @@ public:
 
 	//! Enqueue call into the invocation queue
 	void addAsyncCall(const internalS::SSignalCall &call);
+
+	//! Dequeue the call into the invocation queue. This function can blocks the caller thread
+	internalS::SSignalCall takeAsyncCall();
 };
 
 #endif // SAPPLICATION_H

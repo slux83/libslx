@@ -31,8 +31,10 @@ namespace internalS
 	class SAbstractSignal
 	{
 	protected:
+		//! The mutex of this signal
 		SMutex signalMutex;
 
+		//! The flags of this signal
 		SSignalFlag flags;
 
 	public:
@@ -49,6 +51,34 @@ namespace internalS
 		*/
 		explicit SAbstractSignal(int signalFlags = SSignalFlagThreadSafe | SSignalFlagSyncConnection)
 		{
+			//Checks if the user sets both async and sync calls
+			if ((signalFlags & SSignalFlagAsyncConnection) && (signalFlags & SSignalFlagSyncConnection))
+			{
+				sWarning("SAbstractSignal() invalid Connection policy flags. Setting SSignalFlagSyncConnection as default");
+				signalFlags &= ~SSignalFlagAsyncConnection;	//Prefer sync
+			}
+
+			//Checks if the user sets both thread safe and unsafe calls
+			if ((signalFlags & SSignalFlagThreadUnsafe) && (signalFlags & SSignalFlagThreadSafe))
+			{
+				sWarning("SAbstractSignal() invalid Thread lock policy flags. Setting SSignalFlagThreadSafe as default");
+				signalFlags &= ~SSignalFlagThreadUnsafe;
+			}
+
+			//Checks if the user sets neither async or sync calls
+			if (!(signalFlags & SSignalFlagAsyncConnection) && !(signalFlags & SSignalFlagSyncConnection))
+			{
+				sWarning("SAbstractSignal() invalid Connection policy flags. Setting SSignalFlagSyncConnection as default");
+				signalFlags |= SSignalFlagSyncConnection;	//Prefer sync
+			}
+
+			//Checks if the user sets neither thread safe and unsafe calls
+			if (!(signalFlags & SSignalFlagThreadUnsafe) && !(signalFlags & SSignalFlagThreadSafe))
+			{
+				sWarning("SAbstractSignal() invalid Thread lock policy flags. Setting SSignalFlagThreadSafe as default");
+				signalFlags |= SSignalFlagThreadSafe;
+			}
+
 			flags = (SSignalFlag) signalFlags;
 		}
 	};

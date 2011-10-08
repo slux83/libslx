@@ -21,7 +21,7 @@ class SSignalSlotTest : public CppUnit::TestFixture
 CPPUNIT_TEST_SUITE(SSignalSlotTest);
 CPPUNIT_TEST(testSingleThread);
 CPPUNIT_TEST(testMultiThread);
-CPPUNIT_TEST(testBenchmark);
+//CPPUNIT_TEST(testBenchmark);
 CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -236,7 +236,6 @@ public:
 
 	void testBenchmark()
 	{
-		//TODO
 		SSignal1<int> s1;
 
 		STimestamp t0 = STime::now();

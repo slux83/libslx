@@ -6,7 +6,7 @@
 #ifndef SVARIANT_TEST_H
 #define SVARIANT_TEST_H
 
-
+#include <cstring>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../../src/core/svariant.h"
@@ -40,11 +40,18 @@ public:
 		//std::string
 		SVariant v3(std::string("Hello World"));
 
+		//char*
+		char *_v4 = new char[64];
+		sprintf(_v4, "hello world %d", 666);
+		SVariant v4(_v4);
+
 		int test1 = v1;
 		float test1fail = v1;
 
 		double test2 = v2;
 		std::string test3 = v3;
+
+		char* test4 = v4;
 
 		CPPUNIT_ASSERT_EQUAL(v1.isTypeOf<int>(), true);
 		CPPUNIT_ASSERT_EQUAL(v1.isTypeOf<std::string>(), false);
@@ -56,8 +63,8 @@ public:
 
 		CPPUNIT_ASSERT_EQUAL(test3, std::string("Hello World"));
 
-
-
+		CPPUNIT_ASSERT_EQUAL(strncmp(test4, "hello world 666", 64), 0);
+		CPPUNIT_ASSERT_EQUAL(v4.isTypeOf<const char*>(), false);
 	}
 
 };

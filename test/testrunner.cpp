@@ -7,6 +7,9 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/BriefTestProgressListener.h>
+#include <cppunit/TestListener.h>
+#include <cppunit/Test.h>
+#include <cppunit/TestFailure.h>
 #include "../src/core/sapplication.h"
 
 /*
@@ -23,6 +26,7 @@ int main (int /*argc*/, char** /*argv*/)
 
 	CppUnit::TestResult resultController;
 	CppUnit::BriefTestProgressListener progressListner;
+
 	resultController.addListener(&progressListner);
 
 	runner.addTest(registry.makeTest());

@@ -117,7 +117,20 @@ public:
 	virtual void asyncExec(const std::map<int, SVariant> &args)
 	{
 		S_ASSERT_MSG(args.size() == 1, "SSignal1::asyncExec(...) invalid argument size");
-		fire((arg1)args.at(0));
+
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		if (connections.empty())
+			return;
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			(*it)->fire(args.at(0));
+			it++;
+		}
 	}
 };
 

@@ -40,10 +40,10 @@ void SApplication::start()
 
 void SApplication::addAsyncCall(const internalS::SSignalCall &call)
 {
-	signalAsincCall.enqueue(call);
+	signalAsyncCall.enqueue(call);
 }
 
 internalS::SSignalCall SApplication::takeAsyncCall()
 {
-	return signalAsincCall.dequeue();
+	return signalAsyncCall.dequeue();
 }

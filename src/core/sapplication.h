@@ -16,6 +16,7 @@ class SSlot;
 namespace internalS
 {
 	class SSignalCall;
+	class SAsyncExecutorThread;
 }
 
 /*!
@@ -30,13 +31,14 @@ namespace internalS
 */
 class SApplication
 {
+friend class internalS::SAsyncExecutorThread;
 
 protected:
 	//! Singleton instance
 	static SApplication *instance;
 
 	//! Blocking queue for async signal invocations
-	SUnboundedBlockingQueue<internalS::SSignalCall> signalAsincCall;
+	SUnboundedBlockingQueue<internalS::SSignalCall> signalAsyncCall;
 
 	//! Executors thread pool
 	SAbstractThreadPool *threadPool;

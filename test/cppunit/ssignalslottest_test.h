@@ -6,6 +6,8 @@
 #ifndef SSIGNALSLOTTEST_TEST_H
 #define SSIGNALSLOTTEST_TEST_H
 
+#include <unistd.h>
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -21,6 +23,7 @@ class SSignalSlotTest : public CppUnit::TestFixture
 CPPUNIT_TEST_SUITE(SSignalSlotTest);
 CPPUNIT_TEST(testSingleThread);
 CPPUNIT_TEST(testMultiThread);
+CPPUNIT_TEST(testSingleThreadAsync);
 //CPPUNIT_TEST(testBenchmark);
 CPPUNIT_TEST_SUITE_END();
 
@@ -144,6 +147,14 @@ private:
 					  << ")" << std::endl;
 #endif
 		}
+
+		void mySleepSlot(int arg1)
+		{
+			std::cout << "[Thread " << SThread::getCurrentThreadId() <<
+						 "] MySlotClass1::mySleepSlot(" << arg1 << ")" << std::endl;
+			fflush(stdout);
+			usleep(1000000);
+		}
 	};
 
 	MySlotClass1 *mySlot1;
@@ -232,6 +243,20 @@ public:
 
 		//Each thread calls the slot 10M times
 		CPPUNIT_ASSERT_EQUAL(mySlot1->slot1Counter, 20000000);
+	}
+
+	void testSingleThreadAsync()
+	{
+		MySlotClass1 mySlot;
+		SSignal1<int> *ssignal = new SSignal1<int>(SSignalFlagThreadSafe | SSignalFlagAsyncConnection);
+
+		ssignal->connect(&mySlot, &MySlotClass1::mySleepSlot);
+
+		for (int i=0; i<30; ++i)
+			ssignal->fire(i);
+
+		std::cout << "Good night... THREAD=" << SThread::getCurrentThreadId() << std::endl;
+		sleep(30);
 	}
 
 	void testBenchmark()

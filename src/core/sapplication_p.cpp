@@ -6,6 +6,8 @@
 #include "sapplication_p.h"
 #include "sapplication.h"
 #include "ssignalcall.h"
+#include <iostream>
+#include <cstdio>
 
 namespace internalS
 {
@@ -17,7 +19,11 @@ namespace internalS
 	SThread* SApplicationThreadFactory::createThreadInstance()
 	{
 		std::string threadName = "SApplicationThread-";
-		threadName += threadCounter++;
+		char threadCounterStr[16];
+		snprintf(threadCounterStr, 16, "%d", threadCounter);
+		threadName += threadCounterStr;
+		threadCounter++;
+
 		SThread *thread = new SAsyncExecutorThread(threadName);
 
 		return thread;
@@ -36,7 +42,7 @@ namespace internalS
 
 		S_FOREVER
 		{
-			internalS::SSignalCall call = app->takeAsyncCall();
+			internalS::SSignalCall call = app->signalAsyncCall.dequeue();
 			call.invoke();
 		}
 	}

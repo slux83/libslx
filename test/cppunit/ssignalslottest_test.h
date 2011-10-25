@@ -257,7 +257,6 @@ public:
 		for (int i=0; i<30; ++i)
 			ssignal->fire(i);
 
-		std::cout << "Good night... THREAD=" << SThread::getCurrentThreadId() << std::endl;
 		sleep(30);
 	}
 

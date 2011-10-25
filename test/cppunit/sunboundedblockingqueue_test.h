@@ -97,8 +97,6 @@ public:
 	{
 		//delete queue;
 		//NOTE: we cant destroy here the queue. This is just a test :)
-		queue = NULL;
-
 		fflush(stdout);
 	}
 

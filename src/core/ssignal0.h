@@ -28,6 +28,11 @@ public:
 
 	virtual ~SSignal0()
 	{
+		clear();
+	}
+
+	virtual void clear()
+	{
 		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
 
 		ConnectionListConstIterator it = connections.begin();
@@ -105,7 +110,10 @@ public:
 		while (it != end)
 		{
 			if ((*it)->getTarget() == slotTarget)
+			{
+				delete (*it);
 				it = connections.erase(it);
+			}
 			else
 				it++;
 		}

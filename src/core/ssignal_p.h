@@ -51,6 +51,10 @@ namespace internalS
 		virtual void disconnectAll(SSlot *slotTarget) = 0;
 
 		/*!
+			Clear all connections
+		*/
+		virtual void clear() = 0;
+		/*!
 			Constructor.
 			\param SSignalFlag flags. It accepts also a combination of OR
 

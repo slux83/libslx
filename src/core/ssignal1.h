@@ -29,6 +29,11 @@ public:
 
 	virtual ~SSignal1()
 	{
+		clear();
+	}
+
+	virtual void clear()
+	{
 		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
 
 		ConnectionListConstIterator it = connections.begin();
@@ -38,7 +43,6 @@ public:
 		{
 			//Notify to the slot that the signal is dying
 			(*it)->getTarget()->_signalDestroyed(this);
-
 			delete (*it);
 			it++;
 		}
@@ -108,7 +112,10 @@ public:
 		while (it != end)
 		{
 			if ((*it)->getTarget() == slotTarget)
+			{
+				delete (*it);
 				it = connections.erase(it);
+			}
 			else
 				it++;
 		}

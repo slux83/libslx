@@ -37,13 +37,18 @@ private:
 		std::string name;
 	};
 
+	char *_v4;
+
 public:
 	void setUp()
 	{
+		_v4 = new char[64];
 	}
 
 	void tearDown()
 	{
+		delete [] _v4;
+		_v4 = NULL;
 	}
 
 	void testVariant()
@@ -58,7 +63,6 @@ public:
 		SVariant v3(std::string("Hello World"));
 
 		//char*
-		char *_v4 = new char[64];
 		sprintf(_v4, "hello world %d", 666);
 		SVariant v4(_v4);
 

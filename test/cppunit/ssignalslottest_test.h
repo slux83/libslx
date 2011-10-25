@@ -150,9 +150,11 @@ private:
 
 		void mySleepSlot(int arg1)
 		{
+#if 0
 			std::cout << "[Thread " << SThread::getCurrentThreadId() <<
 						 "] MySlotClass1::mySleepSlot(" << arg1 << ")" << std::endl;
 			fflush(stdout);
+#endif
 			usleep(1000000);
 		}
 	};

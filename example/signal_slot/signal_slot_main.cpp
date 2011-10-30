@@ -26,10 +26,12 @@ public:
 };
 
 /*
-	Example/Benchmark for signal slots
+ Example/Benchmark for signal slots
 */
 int main (int argc, char** argv)
 {
+	S_USE_VAR(argc);
+	S_USE_VAR(argv);
 	SApplication::init();
 	SApplication::getInstance()->start();
 
@@ -58,6 +60,7 @@ int main (int argc, char** argv)
 	for (int i=0; i<1000; ++i)
 		s1.fire(1);
 
+	/* This is called when the slot is destroyed */
 	s1.disconnectAll(&msc2);
 
 	return 0;

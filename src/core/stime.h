@@ -8,6 +8,7 @@
 
 #include <sys/time.h>
 #include <unistd.h>
+#include <stdint.h>
 
 /*!
 	\brief Timestamp class
@@ -19,6 +20,12 @@ public:
 	{
 		sec = 0;
 		usec = 0;
+	}
+
+	STimestamp(unsigned long seconds, unsigned long useconds)
+	{
+		sec = seconds;
+		usec = useconds;
 	}
 
 	unsigned long sec;
@@ -38,8 +45,14 @@ public:
 		nsec = 0;
 	}
 
+	STimeHighRes(unsigned long seconds, uint64_t nseconds)
+	{
+		sec = seconds;
+		nsec = nseconds;
+	}
+
 	unsigned long sec;
-	unsigned long nsec;
+	uint64_t nsec;
 };
 
 /*!

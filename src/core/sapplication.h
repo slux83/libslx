@@ -26,8 +26,6 @@ namespace internalS
 	The getInstance() function must be invoked to get the singletone instance
 
 	\note all functions are thread-safe except init()
-
-	\todo we really need this shit?
 */
 class SApplication
 {

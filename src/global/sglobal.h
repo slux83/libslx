@@ -109,9 +109,6 @@ typedef void (*SLogMsgHandler)(SMsgLevel, const char *);
 
 /*!
     \brief Funcition to pass a custom log message handler
-    \code
-        TODO example
-    \endcode
 */
 void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 

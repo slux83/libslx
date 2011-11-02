@@ -31,7 +31,6 @@ STimer::STimer()
 	// Define sigaction method
 	// This function will be called by the signal
 	signalAction.sa_sigaction = &STimer::timerHandler;
-	//signal(SIGALRM, &STimer::timerHandler2);	//TODO FIX THIS SHIT!
 
 	// Define sigEvent
 	// This information will be forwarded to the signal-handler function

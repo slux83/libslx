@@ -24,12 +24,12 @@ void s_assert(const char *expression, const char *src, int line, const char *msg
 
 void sDebug(const char *msg, ...)
 {
-    if (strlen(msg) > 512)
+	if (strlen(msg) > APPLICATION_LOG_LINE_BUFFER)
         return;
 
-    char tmp[512];
-    tmp[0] = '\0';
-    tmp[511] = '\0';
+	char tmp[APPLICATION_LOG_LINE_BUFFER];
+	tmp[0] = '\0';
+	tmp[APPLICATION_LOG_LINE_BUFFER - 1] = '\0';
 
     va_list vl;
     va_start(vl, msg);
@@ -40,12 +40,12 @@ void sDebug(const char *msg, ...)
 
 void sWarning(const char *msg, ...)
 {
-    if (strlen(msg) > 512)
+	if (strlen(msg) > APPLICATION_LOG_LINE_BUFFER)
         return;
 
-    char tmp[512];
-    tmp[0] = '\0';
-    tmp[511] = '\0';
+	char tmp[APPLICATION_LOG_LINE_BUFFER];
+	tmp[0] = '\0';
+	tmp[APPLICATION_LOG_LINE_BUFFER - 1] = '\0';
 
     va_list vl;
     va_start(vl, msg);
@@ -56,12 +56,12 @@ void sWarning(const char *msg, ...)
 
 void sCritical(const char *msg, ...)
 {
-    if (strlen(msg) > 512)
+	if (strlen(msg) > APPLICATION_LOG_LINE_BUFFER)
         return;
 
-    char tmp[512];
-    tmp[0] = '\0';
-    tmp[511] = '\0';
+	char tmp[APPLICATION_LOG_LINE_BUFFER];
+	tmp[0] = '\0';
+	tmp[APPLICATION_LOG_LINE_BUFFER - 1] = '\0';
 
     va_list vl;
     va_start(vl, msg);
@@ -72,15 +72,15 @@ void sCritical(const char *msg, ...)
 
 void sFatal(const char *msg, ...)
 {
-    if (strlen(msg) > 512)
+	if (strlen(msg) > APPLICATION_LOG_LINE_BUFFER)
     {
         abort();
         return;
     }
 
-    char tmp[512];
-    tmp[0] = '\0';
-    tmp[511] = '\0';
+	char tmp[APPLICATION_LOG_LINE_BUFFER];
+	tmp[0] = '\0';
+	tmp[APPLICATION_LOG_LINE_BUFFER - 1] = '\0';
 
     va_list vl;
     va_start(vl, msg);

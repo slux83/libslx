@@ -11,6 +11,7 @@
 #include "../concurrent/sfixedthreadpool.h"
 #include <map>
 
+class SSignal0;
 class SAbstractSignalSlotConnection;
 class SSlot;
 namespace internalS
@@ -41,9 +42,17 @@ protected:
 	//! Executors thread pool
 	SAbstractThreadPool *threadPool;
 
+	//! Function that fires the signal aboutToQuit
+	void quitNotifier(int code);
+
 private:
-	//Constructor
+	//! Constructor
 	explicit SApplication();
+
+	/*! Handler called on application exit (SIGTERM, SIGINT or SIGABRT).
+		\param signal code
+	*/
+	static void quitHandler(int code);
 
 public:
 	//! SApplication instance init. \reentrant This function isn't thread safe
@@ -63,6 +72,11 @@ public:
 
 	//! Dequeue the call into the invocation queue. This function can blocks the caller thread
 	internalS::SSignalCall takeAsyncCall();
+
+	/*! About to quit signal.
+		\note this signal is synchronous which means that the application will exit after the notify.
+	*/
+	SSignal0 *aboutToQuit;
 };
 
 #endif // SAPPLICATION_H

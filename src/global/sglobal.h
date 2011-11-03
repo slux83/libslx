@@ -31,7 +31,7 @@ typedef enum
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-    \warning String greather than 512 bytes are discarded
+	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sDebug(const char *msg, ...);
 
@@ -45,7 +45,7 @@ void sDebug(const char *msg, ...);
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-    \warning String greather than 512 bytes are discarded
+	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sWarning(const char *msg, ...);
 
@@ -59,7 +59,7 @@ void sWarning(const char *msg, ...);
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-    \warning String greather than 512 bytes are discarded
+	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sCritical(const char *msg, ...);
 
@@ -75,7 +75,7 @@ void sCritical(const char *msg, ...);
 
     sFatal raise an application abort.
 
-    \warning String greather than 512 bytes are discarded
+	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sFatal(const char *msg, ...);
 
@@ -117,6 +117,8 @@ void sInstallCustomMsgLogHandler(SLogMsgHandler handler);
 #define S_FOREVER while (true)
 
 #define APPLICATION_EXECUTOR_THREAD_POOL_SIZE 4
+
+#define APPLICATION_LOG_LINE_BUFFER 4096
 
 template <typename T> inline const T & sMin(const T &x, const T &y) { if (x < y) return x; return y; }
 template <typename T> inline const T & sMax(const T &x, const T &y) { if (x < y) return y; return x; }

@@ -32,6 +32,11 @@ public:
 		STimestamp now = STime::now();
 		sDebug("MySlot::mySlotFast() sec=%d\tmsec=%03d\tcounter=%03d", now.sec, now.usec / 1000, ++counterFast);
 	}
+
+	void mySlotApplicationAboutToQuit()
+	{
+		sWarning("MySlot::mySlotApplicationAboutToQuit() application is about to quit...");
+	}
 };
 
 /*
@@ -44,10 +49,13 @@ int main (int argc, char** argv)
 
 	SApplication::init();
 
+
 	MySlot slot;
 	slot.counterSlow = 0;
 	slot.counterFast = 0;
 	STimer timer1, timer2;
+
+	SApplication::getInstance()->aboutToQuit->connect(&slot, &MySlot::mySlotApplicationAboutToQuit);
 
 	//timer1: period 1.5 sec for a total of 4 times
 	timer1.setInterval(STimestamp(1, 500000));

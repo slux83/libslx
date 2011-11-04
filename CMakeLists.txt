@@ -13,7 +13,9 @@ file(GLOB SLX_SOURCES   src/*.cpp src/concurrent/*.cpp
                         src/concurrent/*.h
 						src/global/*.h
 						src/core/*.h
-						src/core/*.cpp)
+						src/core/*.cpp
+						src/net/*.h
+						src/net/*.cpp)
 
 set(CMAKE_CXX_FLAGS "-Wall -std=c++0x -g -Os -pedantic")
 

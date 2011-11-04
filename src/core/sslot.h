@@ -7,7 +7,7 @@
 #define SSLOT_H
 
 #include "ssignal_p.h"
-#include <set>
+#include <list>
 
 /*!
 	\brief Slot class.
@@ -17,7 +17,7 @@ class SSlot
 {
 private:
 	//! Signals connected to this object
-	std::set<internalS::SAbstractSignal*> connectedSignals;
+	std::list<internalS::SAbstractSignal*> connectedSignals;
 
 public:
 	//! Mutex for slots invocations. It can be user by subclasses too

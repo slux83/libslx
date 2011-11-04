@@ -11,7 +11,7 @@ SSlot::SSlot()
 
 SSlot::~SSlot()
 {
-	for (std::set<internalS::SAbstractSignal*>::const_iterator it = connectedSignals.begin();
+	for (std::list<internalS::SAbstractSignal*>::const_iterator it = connectedSignals.begin();
 		 it != connectedSignals.end(); it++)
 	{
 		internalS::SAbstractSignal *signal = *it;
@@ -24,11 +24,11 @@ SSlot::~SSlot()
 void SSlot::_addConnectedSignal(internalS::SAbstractSignal *signal)
 {
 	S_ASSERT_MSG(signal != NULL, "SSlot::_addConnectedSignal() NULL argument");
-	connectedSignals.insert(signal);
+	connectedSignals.push_back(signal);
 }
 
 void SSlot::_signalDestroyed(internalS::SAbstractSignal *signal)
 {
 	S_ASSERT_MSG(signal != NULL, "SSlot::_signalDestroyed() NULL argument");
-	connectedSignals.erase(signal);
+	connectedSignals.remove(signal);
 }

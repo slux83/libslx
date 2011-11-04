@@ -2,8 +2,7 @@
 [FILE_HEADER_BEGIN]
 [FILE_HEADER_END]
 ******************************************************************************/
-#include <signal.h>
-#include <time.h>
+#include <cstring>
 #include "stimer.h"
 
 STimer::STimer()
@@ -20,7 +19,32 @@ STimer::STimer()
 	timerId = 0;
 
 	init = false;
-	if (timer_create(CLOCK_REALTIME, NULL, &timerId) == -1)
+
+	// Clear the sa_mask
+	sigemptyset(&signalAction.sa_mask);
+
+	// set the SA_SIGINFO flag to use the extended signal-handler function
+	signalAction.sa_flags = SA_SIGINFO;
+
+	// Define sigaction method
+	// This function will be called by the signal
+	signalAction.sa_sigaction = &STimer::timerHandler;
+	signal(SIGALRM, &STimer::timerHandler2);	//TODO FIX THIS SHIT!
+
+	// Define sigEvent
+	// This information will be forwarded to the signal-handler function
+	memset(&signalEvent, 0, sizeof(signalEvent));
+
+	// With the SIGEV_SIGNAL flag we say that there is sigev_value
+	signalEvent.sigev_notify = SIGEV_SIGNAL;
+
+	// Now it's possible to give a pointer to the object
+	signalEvent.sigev_value.sival_ptr = (void*) this;
+
+	// Declare this signal as Alarm Signal
+	signalEvent.sigev_signo = SIGALRM;
+
+	if (timer_create(CLOCK_REALTIME, &signalEvent, &timerId) == -1)
 	{
 		sWarning("STimer::STimer() Cannot create timer. ERRNO=%d", errno);
 		init = false;
@@ -28,12 +52,6 @@ STimer::STimer()
 	else
 	{
 		init = true;
-	}
-
-	if (init)
-	{
-		//TODO
-		//timer_connect(timerId, &STimer::timerHandler, 0);
 	}
 }
 
@@ -64,13 +82,21 @@ void STimer::setInterval(const STimestamp &interval)
 	this->interval.it_interval.tv_nsec = interval.usec * 1000;
 }
 
-void STimer::timerHandler(timer_t timerId, int arg)
+//FIXME/TODO never invoked!!
+void STimer::timerHandler(int signalType, siginfo_t *sigInfo, void *context)
 {
-	S_USE_VAR(arg);
-	S_USE_VAR(timerId);
+	S_USE_VAR(signalType);
+	S_USE_VAR(context);
 
-	if (timeout)
-		timeout->fire();
+	sigignore(SIGALRM);
+	sDebug("TIMER FIRED");
+
+	// get the pointer out of the siginfo structure and asign it to a new pointer variable
+	STimer *timerCaller = reinterpret_cast<STimer*> (sigInfo->si_value.sival_ptr);
+
+	// call the member function
+	if (timerCaller->timeout)
+		timerCaller->timeout->fire();
 
 }
 

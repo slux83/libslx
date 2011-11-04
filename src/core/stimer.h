@@ -6,6 +6,8 @@
 #ifndef STIMER_H
 #define STIMER_H
 
+#include <signal.h>
+#include <time.h>
 #include "stime.h"
 #include "ssignal.h"
 
@@ -25,17 +27,30 @@ private:
 	//! single timeout flag. If true the timeout signal will be called only the first time
 	bool isSingleTimeout;
 
-	/*! Callback called by the POSIX timer after the timeout
-		\param timerId the ID of the timer
-		\param arg the argument
-	*/
-	void timerHandler(timer_t timerId, int arg);
+	/*! Callback called by the POSIX timer after the timeout */
+	static void timerHandler(int signalType, siginfo_t *sigInfo, void *context);
+	static void timerHandler2(int signalType)
+	{
+		sDebug("BUUU %d", signalType);
+	}
 
 	//! the posix timer ID
 	timer_t timerId;
 
 	//! init flag
 	bool init;
+
+	// Signal blocking set
+	sigset_t SigBlockSet;
+
+	// The according signal event containing the this-pointer
+	struct sigevent signalEvent;
+
+	// Defines the action for the signal -> thus signalAction <img src="http://quirk.ch/wordpress/wp-includes/images/smilies/icon_wink.gif" alt=";-)" class="wp-smiley">
+	struct sigaction signalAction;
+
+	// The itimerspec structure for the timer
+	struct itimerspec timerSpecs;
 
 public:
 	//! Constructor

@@ -29,10 +29,6 @@ private:
 
 	/*! Callback called by the POSIX timer after the timeout */
 	static void timerHandler(int signalType, siginfo_t *sigInfo, void *context);
-	static void timerHandler2(int signalType)
-	{
-		sDebug("BUUU %d", signalType);
-	}
 
 	//! the posix timer ID
 	timer_t timerId;

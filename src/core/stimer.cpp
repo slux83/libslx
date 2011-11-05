@@ -29,7 +29,7 @@ STimer::STimer()
 	// Define sigaction method
 	// This function will be called by the signal
 	signalAction.sa_sigaction = &STimer::timerHandler;
-	signal(SIGALRM, &STimer::timerHandler2);	//TODO FIX THIS SHIT!
+	//signal(SIGALRM, &STimer::timerHandler2);	//TODO FIX THIS SHIT!
 
 	// Define sigEvent
 	// This information will be forwarded to the signal-handler function
@@ -44,7 +44,12 @@ STimer::STimer()
 	// Declare this signal as Alarm Signal
 	signalEvent.sigev_signo = SIGALRM;
 
-	if (timer_create(CLOCK_REALTIME, &signalEvent, &timerId) == -1)
+	if (sigaction(SIGALRM, &signalAction, NULL) == -1)
+		sWarning("STimer::STimer() Could not install new signal handler. ERRNO=%d", errno);
+	else
+		init = true;
+
+	if (init && timer_create(CLOCK_REALTIME, &signalEvent, &timerId) == -1)
 	{
 		sWarning("STimer::STimer() Cannot create timer. ERRNO=%d", errno);
 		init = false;
@@ -87,9 +92,6 @@ void STimer::timerHandler(int signalType, siginfo_t *sigInfo, void *context)
 {
 	S_USE_VAR(signalType);
 	S_USE_VAR(context);
-
-	sigignore(SIGALRM);
-	sDebug("TIMER FIRED");
 
 	// get the pointer out of the siginfo structure and asign it to a new pointer variable
 	STimer *timerCaller = reinterpret_cast<STimer*> (sigInfo->si_value.sival_ptr);

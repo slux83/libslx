@@ -13,7 +13,7 @@ public:
 	void mySlot()
 	{
 		STimestamp now = STime::now();
-		sDebug("MySlot::mySlot() sec=%d\tusec=%d", now.sec, now.usec);
+		sDebug("MySlot::mySlot() sec=%d\tmsec=%d", now.sec, now.usec / 1000);
 	}
 };
 
@@ -30,7 +30,7 @@ int main (int argc, char** argv)
 
 	STimer timer;
 
-	timer.setInterval(STimestamp(3, 0));
+	timer.setInterval(STimestamp(1, 500000));
 	timer.setIsSingleTimeout(false);
 
 	MySlot slot;
@@ -38,9 +38,10 @@ int main (int argc, char** argv)
 	timer.timeout->connect(&slot, &MySlot::mySlot);
 	timer.start();
 
+	//Deadlock
 	SSemaphore sem;
-
 	sem.acquire(3);
+
 	sDebug("Exiting...");
 	return 0;
 }

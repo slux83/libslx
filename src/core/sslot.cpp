@@ -21,6 +21,7 @@ SSlot::~SSlot()
 
 	connectedSignals.clear();
 }
+
 void SSlot::_addConnectedSignal(internalS::SAbstractSignal *signal)
 {
 	S_ASSERT_MSG(signal != NULL, "SSlot::_addConnectedSignal() NULL argument");

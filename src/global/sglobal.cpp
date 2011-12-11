@@ -4,6 +4,7 @@
 ******************************************************************************/
 
 #include "sglobal.h"
+#include "../concurrent/smutex.h"
 #include <iostream>
 #include <cstdio>
 #include <cstring>
@@ -11,6 +12,7 @@
 #include <cstdarg>
 
 static SLogMsgHandler globalHandler = NULL;
+static SMutex debugMutex;
 
 void s_assert(const char *expression, const char *src, int line, const char *msg)
 {
@@ -115,6 +117,7 @@ void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg)
         prefix = "UNKNOWN  ";
     };
 
+	debugMutex.lock();
 	if (globalHandler == NULL)
 	{
         std::cerr << prefix << msg << std::endl;
@@ -122,6 +125,7 @@ void printMessageOnStdErr(SMsgLevel messageLevel, const char* msg)
     }
     else
         (*globalHandler)(messageLevel, msg);      //Call the custom message handler
+	debugMutex.unlock();
 }
 
 void sInstallCustomMsgLogHandler(SLogMsgHandler handler)

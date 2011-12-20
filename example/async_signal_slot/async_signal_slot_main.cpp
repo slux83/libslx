@@ -9,6 +9,7 @@
 #include "../../src/core/ssignal.h"
 #include "../../src/core/sapplication.h"
 #include "../../src/concurrent/ssemaphore.h"
+#include "../../src/core/stime.h"
 
 #define NUMBER_OF_FIRES 1000
 
@@ -43,10 +44,19 @@ public:
 
 class EventConsumer : public SSlot
 {
+private:
+	int consumerNumber;
+
 public:
+
+	EventConsumer(int number)
+	{
+		consumerNumber = number;
+	}
+
 	void consume(int i)
 	{
-		sDebug("EventConsumer::consume() consuming %d", i);
+		sDebug("EventConsumer::consume() consuming %d (%d)", i, consumerNumber);
 		programEnd.release();
 	}
 };
@@ -63,15 +73,23 @@ int main (int argc, char** argv)
 	SApplication::getInstance()->start();
 
 	EventProducer ep;
-	EventConsumer ec1, ec2, ec3;
+	EventConsumer ec1(1), ec2(2), ec3(3);
 
 	ep.event->connect(&ec1, &EventConsumer::consume);
 	ep.event->connect(&ec2, &EventConsumer::consume);
 	ep.event->connect(&ec3, &EventConsumer::consume);
+
+	STimestamp checkpointBegin = STime::now();
+
 	ep.start();
 
 	sDebug("Main sleeping...");
 	programEnd.acquire(NUMBER_OF_FIRES * 3);	//We wait NUMBER_OF_FIRES async signal fires with 3 consumer
-	sDebug("Main exiting...");
+	STimestamp checkpointEnd = STime::now();
+
+	sDebug("Main exiting... Total execution time: %d sec and %06d usec",
+		   abs(checkpointBegin.sec - checkpointEnd.sec),
+		   abs(checkpointBegin.usec - checkpointEnd.usec));
+
 	return 0;
 }

@@ -207,10 +207,54 @@ namespace internalS
 	};
 
 	/*!
-		\internal Abstract signal connection with two argument
-		\todo to be implemented
+		\internal Abstract signal connection with one argument
 	*/
+	template <typename arg1, typename arg2>
+	class SAbstractSignalSlotConnection2 : public SAbstractSignalSlotConnection
+	{
+	public:
+		virtual void fire(arg1 a1, arg2 a2) = 0;
+		virtual SSlot* getTarget() = 0;
+	};
 
+	/*!
+		\internal Concrete connection object with one argument
+	*/
+	template <class SSlotType, typename arg1, typename arg2>
+	class SSignalSlotConnection2 : public SAbstractSignalSlotConnection2<arg1, arg2>
+	{
+		typedef void (SSlotType::*CallableMethod)(arg1, arg2);
+
+	private:
+		SSlotType *slotTarget;
+		CallableMethod callableMethod;
+		SSignalFlag flags;
+
+	public:
+		explicit SSignalSlotConnection2(SSlotType *target, CallableMethod callable, SSignalFlag signalFlags)
+		{
+			slotTarget = target;
+			callableMethod = callable;
+			flags = signalFlags;
+		}
+
+		virtual void fire(arg1 a1, arg2 a2)
+		{
+			SMutexLocker locker((flags & SSignalFlagThreadSafe)? &(slotTarget->slotCallbackLock) : NULL);
+			S_USE_VAR(locker);
+
+			if (slotTarget != NULL)
+				(slotTarget->*callableMethod)(a1, a2);
+			else
+				sWarning("internalS::SSignalSlotConnection2::fire(arg1, arg2) slotTarget is NULL");
+		}
+
+		virtual SSlot* getTarget()
+		{
+			return slotTarget;
+		}
+
+	};
 }
 
 #endif // SSIGNAL_P_H

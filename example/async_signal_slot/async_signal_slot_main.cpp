@@ -18,11 +18,11 @@ SSemaphore programEnd;
 class EventProducer : public SThread
 {
 public:
-	SSignal1<int> *event;
+	SSignal2<int, double> *event;
 
 	EventProducer()
 	{
-		event = new SSignal1<int>(SSignalFlagThreadUnsafe | SSignalFlagAsyncConnection);
+		event = new SSignal2<int, double>(SSignalFlagThreadUnsafe | SSignalFlagAsyncConnection);
 	}
 
 	virtual ~EventProducer()
@@ -35,9 +35,10 @@ public:
 	{
 		for (int i=0; i<NUMBER_OF_FIRES; i++)
 		{
-			sDebug("EventProducer::startProduceEvents() firing %d", i);
+			double tmp = i * 3.14159265;
+			sDebug("EventProducer::startProduceEvents() firing %d, %.5f", i, tmp);
 
-			event->fire(i);
+			event->fire(i, tmp);
 		}
 	}
 };
@@ -54,9 +55,9 @@ public:
 		consumerNumber = number;
 	}
 
-	void consume(int i)
+	void consume(int i, double d)
 	{
-		sDebug("EventConsumer::consume() consuming %d (%d)", i, consumerNumber);
+		sDebug("EventConsumer::consume() consuming %d, %.5f (%d)", i, d, consumerNumber);
 		programEnd.release();
 	}
 };

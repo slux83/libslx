@@ -10,6 +10,10 @@
 #   define NULL 0
 #endif
 
+#ifndef ENABLE_DEBUG
+#	error "ENABLE_DEBUG not defined."
+#endif
+
 /*!
     \brief Enumeration of debug levels
     The fatal level is used in asserts and raise an application abort.
@@ -32,6 +36,8 @@ typedef enum
     should be a Latin-1 string.
 
 	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
+
+	\note if ENABLE_DEBUG is defined as 0, this function will be ignored for performance reasons
 */
 void sDebug(const char *msg, ...);
 

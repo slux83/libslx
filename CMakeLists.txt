@@ -18,6 +18,7 @@ file(GLOB SLX_SOURCES   src/*.cpp src/concurrent/*.cpp
 						src/net/*.cpp)
 
 set(CMAKE_CXX_FLAGS "-Wall -std=c++0x -g -Os -pedantic")
+add_definitions(-DENABLE_DEBUG=1)
 
 # Build tests
 if(BUILD_TESTS)

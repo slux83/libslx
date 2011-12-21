@@ -26,6 +26,7 @@ void s_assert(const char *expression, const char *src, int line, const char *msg
 
 void sDebug(const char *msg, ...)
 {
+#if ENABLE_DEBUG
 	if (strlen(msg) > APPLICATION_LOG_LINE_BUFFER)
         return;
 
@@ -38,6 +39,7 @@ void sDebug(const char *msg, ...)
     vsprintf(tmp, msg, vl);
     printMessageOnStdErr(SMsgLevelDebug, tmp);
     va_end(vl);
+#endif
 }
 
 void sWarning(const char *msg, ...)

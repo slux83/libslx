@@ -7,6 +7,8 @@
 #include "../../src/core/stime.h"
 #include "../../src/concurrent/ssemaphore.h"
 
+SSemaphore sem;
+
 class MySlot : public SSlot
 {
 public:
@@ -23,7 +25,7 @@ public:
 		if (counterSlow == 4)
 		{
 			sDebug("MySlot::mySlotSlow() bye bye");
-			exit(0);
+			sem.release(3);
 		}
 	}
 
@@ -53,7 +55,8 @@ int main (int argc, char** argv)
 	MySlot slot;
 	slot.counterSlow = 0;
 	slot.counterFast = 0;
-	STimer timer1, timer2;
+	STimer timer1;
+	STimer timer2;
 
 	SApplication::getInstance()->aboutToQuit->connect(&slot, &MySlot::mySlotApplicationAboutToQuit);
 
@@ -71,8 +74,12 @@ int main (int argc, char** argv)
 	timer2.start();
 
 	//Deadlock the main thread :)
-	SSemaphore sem;
 	sem.acquire(3);
+
+	timer1.stop();
+	timer2.stop();
+
+	SApplication::getInstance()->shutdown();
 
 	return 0;
 }

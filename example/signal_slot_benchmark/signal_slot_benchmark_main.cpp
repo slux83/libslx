@@ -157,5 +157,7 @@ int main (int argc, char** argv)
 			abs(checkpointOneMillion10SlotsUnsafeBegin.usec - checkpointOneMillion10SlotsUnsafeEnd.usec));
 	std::cout << buff << std::endl << std::endl;
 
+	SApplication::getInstance()->shutdown();
+
 	return 0;
 }

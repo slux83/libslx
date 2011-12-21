@@ -107,6 +107,11 @@ namespace internalS
 			S_ASSERT_MSG(signal != NULL, "SSignalCall::invoke() NULL signal");
 			signal->asyncExec(arguments);
 		}
+
+		int getArgumentsSize()
+		{
+			return arguments.size();
+		}
 	};
 }
 

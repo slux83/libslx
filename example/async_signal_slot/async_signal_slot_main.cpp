@@ -92,5 +92,7 @@ int main (int argc, char** argv)
 		   abs(checkpointBegin.sec - checkpointEnd.sec),
 		   abs(checkpointBegin.usec - checkpointEnd.usec));
 
+	SApplication::getInstance()->shutdown();
+
 	return 0;
 }

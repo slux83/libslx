@@ -7,6 +7,7 @@
 #include "smutexlocker.h"
 #include "../global/sglobal.h"
 #include <cstdio>
+#include <signal.h>
 
 SThread::SThread(const std::string &threadName) : runStatus(false)
 {
@@ -112,6 +113,8 @@ void *SThread::starter(void *arg)
     creator->run();
 
     creator->runStatus = false;
+	pthread_exit(NULL);
     return 0;
 }
+
 

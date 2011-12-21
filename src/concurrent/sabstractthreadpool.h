@@ -69,6 +69,12 @@ public:
 		Some implementations could ignore one or both of the arguments.
 	*/
 	virtual void start(int minPoolSize = -1, int maxPoolSize = -1) = 0;
+
+	/*! \return the number of threads running */
+	virtual unsigned short getNumberOfThreads() = 0;
+
+	/*! Join the ending of all threads */
+	virtual void join() = 0;
 };
 
 #endif // SABSTRACTTHREADPOOL_H

@@ -18,6 +18,12 @@ namespace internalS
 {
 	class SSignalCall;
 	class SAsyncExecutorThread;
+
+	//! \internal
+	struct Shutdown
+	{
+		unsigned int size;
+	};
 }
 
 /*!
@@ -30,7 +36,8 @@ namespace internalS
 */
 class SApplication
 {
-friend class internalS::SAsyncExecutorThread;
+
+	friend class internalS::SAsyncExecutorThread;
 
 protected:
 	//! Singleton instance
@@ -70,8 +77,11 @@ public:
 	//! Enqueue call into the invocation queue
 	void addAsyncCall(const internalS::SSignalCall &call);
 
-	//! Dequeue the call into the invocation queue. This function can blocks the caller thread
-	internalS::SSignalCall takeAsyncCall();
+	/*!
+		This function should be called befor the real application shutdown.
+		\note After this invocation, all asynchronous signals cannot be fired!
+	*/
+	void shutdown();
 
 	/*! About to quit signal.
 		\note this signal is synchronous which means that the application will exit after the notify.

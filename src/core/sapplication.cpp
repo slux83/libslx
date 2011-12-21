@@ -51,11 +51,6 @@ void SApplication::addAsyncCall(const internalS::SSignalCall &call)
 	signalAsyncCall.enqueue(call);
 }
 
-internalS::SSignalCall SApplication::takeAsyncCall()
-{
-	return signalAsyncCall.dequeue();
-}
-
 void SApplication::quitHandler(int code)
 {
 	getInstance()->quitNotifier(code);
@@ -71,3 +66,25 @@ void SApplication::quitNotifier(int code)
 	exit(0);
 }
 
+void SApplication::shutdown()
+{
+	//Shutdown all the consumer thread in the thread pool
+	internalS::Shutdown s;
+	s.size = threadPool->getNumberOfThreads();
+
+	internalS::SSignalCall shutdownCall;
+	shutdownCall.addArgument(s, 0);
+
+	signalAsyncCall.enqueue(shutdownCall);
+
+	threadPool->join();
+
+	delete threadPool;
+	threadPool = NULL;
+
+	delete aboutToQuit;
+	aboutToQuit = NULL;
+
+	delete instance;
+	instance = NULL;
+}

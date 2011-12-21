@@ -9,10 +9,13 @@
 
 SMutexLocker::SMutexLocker(SMutex *mutex)
 {
+	this->mutex = NULL;
+	alreadyUnlocked = false;
+
 	if (mutex)
 	{
 		this->mutex = mutex;
-		alreadyUnlocked = false;
+		this->alreadyUnlocked = false;
 
 		this->mutex->lock();
 	}

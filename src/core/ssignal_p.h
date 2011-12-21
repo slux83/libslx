@@ -207,7 +207,7 @@ namespace internalS
 	};
 
 	/*!
-		\internal Abstract signal connection with one argument
+		\internal Abstract signal connection with two arguments
 	*/
 	template <typename arg1, typename arg2>
 	class SAbstractSignalSlotConnection2 : public SAbstractSignalSlotConnection
@@ -218,7 +218,7 @@ namespace internalS
 	};
 
 	/*!
-		\internal Concrete connection object with one argument
+		\internal Concrete connection object with two arguments
 	*/
 	template <class SSlotType, typename arg1, typename arg2>
 	class SSignalSlotConnection2 : public SAbstractSignalSlotConnection2<arg1, arg2>

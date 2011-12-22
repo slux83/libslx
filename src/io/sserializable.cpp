@@ -8,3 +8,9 @@
 SSerializable::SSerializable()
 {
 }
+
+bool SSerializable::isLittleEndian()
+{
+	int tester = 0x0A;
+	return (*((char *)&tester)) == 0x0A;
+}

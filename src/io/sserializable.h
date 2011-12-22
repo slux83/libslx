@@ -24,6 +24,11 @@ class SSerializable
 {
 public:
 	SSerializable();
+
+	/*! Check if this machine has a little endian architecture
+		\return true if it's little endian, false if big endian
+	*/
+	static bool isLittleEndian();
 };
 
 #define S_SERIALIZABLE_ID(id) \
@@ -96,12 +101,22 @@ public: \
 		return name; \
 	}
 
-#define S_SERIALIZABLE_DOUBLE64(name) \
+#define S_SERIALIZABLE_FLOAT64(name) \
 public: \
 	double __getSerializable_##name() \
 	{ \
 		return name; \
 	}
+
+//TODO FIXME
+#define S_SERIALIZABLE_FIELDS(...) \
+public: \
+	void serialize() \
+	{ \
+		 \
+	} \
+	\
+	void deserialize() {}
 
 
 #endif // SSERIALIZABLE_H

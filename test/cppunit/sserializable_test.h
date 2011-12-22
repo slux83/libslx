@@ -49,6 +49,8 @@ public:
 
 	void testSerilizableObject()
 	{
+		CPPUNIT_ASSERT_EQUAL(SSerializable::isLittleEndian(), true);
+
 		MySerializableObj obj;
 		obj.setMyInt8(12);
 		CPPUNIT_ASSERT_EQUAL(12, (int)obj.__getSerializable_myInt8());

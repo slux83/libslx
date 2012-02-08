@@ -10,7 +10,6 @@
 #include "../concurrent/smutex.h"
 #include "../concurrent/smutexlocker.h"
 #include "sapplication.h"
-#include "spolicy.h"
 
 class SSlot;
 class SVariant;

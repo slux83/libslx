@@ -19,6 +19,7 @@ typedef std::uint64_t s_uint64;
 
 /*!
 	\brief Serializable base class
+	//TODO: This class must be implemented
 */
 class SSerializable
 {

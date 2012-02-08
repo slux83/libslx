@@ -96,7 +96,7 @@ public:
 	void tearDown()
 	{
 		//delete queue;
-		//NOTE: we cant destroy here the queue. This is just a test :)
+		//NOTE: we can't destroy here the queue. This is just a test :)
 		fflush(stdout);
 	}
 

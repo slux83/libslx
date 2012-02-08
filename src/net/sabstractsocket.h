@@ -31,6 +31,9 @@ public:
 
 	//! Distructor
 	virtual ~SAbstractSocket() {}
+
+	//! TODO: Close/Abort the socket
+	void close() {}
 };
 
 #endif // SABSTRACTSOCKET_H

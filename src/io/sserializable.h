@@ -109,7 +109,6 @@ public: \
 		return name; \
 	}
 
-//TODO FIXME
 #define S_SERIALIZABLE_FIELDS(...) \
 public: \
 	void serialize() \

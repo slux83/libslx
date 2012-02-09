@@ -6,34 +6,58 @@
 #ifndef SABSTRACTSOCKET_H
 #define SABSTRACTSOCKET_H
 
+#include <memory>
+#include <string>
+#include <stdint.h>
+#include "../global/sglobal.h"
+
 /*!
 	\brief Abstract socket class
-	\todo
 */
 class SAbstractSocket
 {
 public:
 
-	//! Enumeratino of Protocol Type
-	enum ProtocolType
+	//! Socket error enumeration
+	enum SocketError
 	{
-		ProtocolTypeUnk,
-		ProtocolTypeIpv4,
-		ProtocolTypeIpv6
+		SocketErrorUnknown,
+		SocketErrorCannotResolve,
+		SocketErrorCannotCreateSocket,
+		SocketErrorConnectionRefused
+	};
+
+	//! Enumeratino of Protocol Type
+	enum SocketType
+	{
+		SocketTypeUnk,
+		SocketTypeTcp,
+		SocketTypeUdp
 	};
 
 protected:
-	ProtocolType protocolType;
+	SocketType socketType;
 
 public:
 	//! Constructor
-	SAbstractSocket(SAbstractSocket::ProtocolType type);
+	SAbstractSocket(SAbstractSocket::SocketType type);
 
 	//! Distructor
 	virtual ~SAbstractSocket() {}
 
-	//! TODO: Close/Abort the socket
-	void close() {}
+	//! Abort and close the socket discarding any pending data in the write buffer.
+	virtual void abort() {}
+
+	/*! Send data using the socket.
+		\return the number of wrote bytes, -1 means error
+	*/
+	virtual int64_t writeData(const char* data, size_t size) = 0;
+
+	/*! Read data using the socket with a maximum of maxSize.
+		\return the number of read bytes, -1 means error
+	*/
+	virtual int64_t readData(char* data, uint32_t maxSize) = 0;
+
 };
 
 #endif // SABSTRACTSOCKET_H

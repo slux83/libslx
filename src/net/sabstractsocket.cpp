@@ -5,8 +5,8 @@
 
 #include "sabstractsocket.h"
 
-SAbstractSocket::SAbstractSocket(SAbstractSocket::ProtocolType type)
-	: protocolType(type)
+SAbstractSocket::SAbstractSocket(SocketType type)
+	: socketType(type)
 {
 
 }

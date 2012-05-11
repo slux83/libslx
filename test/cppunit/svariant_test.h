@@ -66,6 +66,11 @@ public:
 		sprintf(_v4, "hello world %d", 666);
 		SVariant v4(_v4);
 
+		//Null variant
+		SVariant v5(NULL);
+
+		CPPUNIT_ASSERT_EQUAL(v5.isTypeOf<int>(), true);
+
 		int test1 = v1;
 		int _p1 = v1;
 		int _p2 = v1;

@@ -6,6 +6,7 @@
 #ifndef SWAITCONDITION_TEST_H
 #define SWAITCONDITION_TEST_H
 
+#include <unistd.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../../src/concurrent/swaitcondition.h"

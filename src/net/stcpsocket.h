@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #include "sabstractsocket.h"
 
@@ -56,6 +57,9 @@ public:
 
 	//! Get the remote port, or 0 on error
 	uint16_t getRemotePort() const;
+
+	//! Get the socket descriptor. It can be -1 if the socket in not valid.
+	inline int getSocketDescriptor() { return sock; }
 
 };
 

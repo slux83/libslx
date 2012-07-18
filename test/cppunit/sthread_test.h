@@ -6,6 +6,7 @@
 #ifndef STHREAD_TEST_H
 #define STHREAD_TEST_H
 
+#include <unistd.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../../src/concurrent/sthread.h"

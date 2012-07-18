@@ -6,6 +6,7 @@
 #ifndef SBLOCKINGQUEUE_TEST_H
 #define SBLOCKINGQUEUE_TEST_H
 
+#include <unistd.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../../src/concurrent/sunboundedblockingqueue.h"

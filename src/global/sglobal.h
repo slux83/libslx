@@ -35,7 +35,7 @@ typedef enum
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
+	\warning String greater than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 
 	\note if ENABLE_DEBUG is defined as 0, this function will be ignored for performance reasons
 */
@@ -51,7 +51,7 @@ void sDebug(const char *msg, ...);
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
+	\warning String greater than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sWarning(const char *msg, ...);
 
@@ -65,7 +65,7 @@ void sWarning(const char *msg, ...);
     it works in similar way to the C printf() function. The format
     should be a Latin-1 string.
 
-	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
+	\warning String greater than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sCritical(const char *msg, ...);
 
@@ -81,7 +81,7 @@ void sCritical(const char *msg, ...);
 
     sFatal raise an application abort.
 
-	\warning String greather than APPLICATION_LOG_LINE_BUFFER bytes are discarded
+	\warning String greater than APPLICATION_LOG_LINE_BUFFER bytes are discarded
 */
 void sFatal(const char *msg, ...);
 

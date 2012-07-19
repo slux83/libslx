@@ -14,6 +14,12 @@ STcpSocket::STcpSocket() : SAbstractSocket(SocketTypeTcp)
 	sock = -1;
 }
 
+STcpSocket::STcpSocket(int socketDescriptor): SAbstractSocket(SocketTypeTcp)
+{
+	S_ASSERT_MSG(socketDescriptor >= 0, "STcpSocket::STcpSocket(int socketDescriptor) argument must be greater (or equals) to zero");
+	sock = socketDescriptor;
+}
+
 STcpSocket::~STcpSocket()
 {
 	abort();
@@ -41,7 +47,7 @@ bool STcpSocket::connect(const std::string &host, uint16_t port, SocketError *er
 	out << port;
 	portString = out.str();
 
-	if (error) *error = SocketErrorUnknown;
+	if (error) *error = SocketErrorNoError;
 
 	// Resolve the name if needed (IPv4 or IPv6 we don't care)
 	memset(&hints, 0, sizeof hints);

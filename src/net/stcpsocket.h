@@ -28,6 +28,9 @@ public:
 	//! Constructor
 	STcpSocket();
 
+	//! Costructor \arg socketDescriptor to use
+	STcpSocket(int socketDescriptor);
+
 	//! Distructor
 	virtual ~STcpSocket();
 
@@ -59,7 +62,7 @@ public:
 	uint16_t getRemotePort() const;
 
 	//! Get the socket descriptor. It can be -1 if the socket in not valid.
-	inline int getSocketDescriptor() { return sock; }
+	inline int getSocketDescriptor() const { return sock; }
 
 };
 

@@ -21,10 +21,13 @@ public:
 	//! Socket error enumeration
 	enum SocketError
 	{
-		SocketErrorUnknown,
+		SocketErrorNoError,
 		SocketErrorCannotResolve,
 		SocketErrorCannotCreateSocket,
-		SocketErrorConnectionRefused
+		SocketErrorConnectionRefused,
+		SocketErrorCannotBindSocket,
+		SocketErrorCannotListen,
+		SocketErrorUnknown
 	};
 
 	//! Enumeratino of Protocol Type

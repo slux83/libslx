@@ -26,7 +26,7 @@ int main (int argc, char** argv)
 	bool retVal = socket->connect("::1", 80, &error);
 
 	S_ASSERT_MSG(retVal, "connect returned false");
-	S_ASSERT_MSG(error == SAbstractSocket::SocketErrorUnknown, "error is not unknown");
+	S_ASSERT_MSG(error == SAbstractSocket::SocketErrorNoError, "error is not NoError");
 
 	S_ASSERT_MSG(socket->isConnected(), "socket not connected");
 
@@ -42,7 +42,7 @@ int main (int argc, char** argv)
 
 	S_ASSERT_MSG(readBytes != -1, "readBytes is -1");
 
-	sDebug("buffer(size %lld): %s ", readBytes, buff);
+	sDebug("buffer received with size %lld byte(s):\n%s ", readBytes, buff);
 
 	delete socket;
 	socket = NULL;

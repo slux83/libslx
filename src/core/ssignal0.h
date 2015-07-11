@@ -1,0 +1,128 @@
+/******************************************************************************
+[FILE_HEADER_BEGIN]
+[FILE_HEADER_END]
+******************************************************************************/
+
+#ifndef SSIGNAL0_H
+#define SSIGNAL0_H
+
+#include <list>
+#include "ssignal_p.h"
+#include "sslot.h"
+#include "ssignalcall.h"
+
+class SSignal0 : public internalS::SAbstractSignal
+{
+	typedef std::list<internalS::SAbstractSignalSlotConnection0*> ConnectionList;
+	typedef typename ConnectionList::iterator ConnectionListConstIterator;
+
+private:
+	ConnectionList connections;
+
+public:
+
+	explicit SSignal0(int signalFlags = SSignalFlagThreadSafe | SSignalFlagSyncConnection)
+		: internalS::SAbstractSignal(signalFlags)
+	{
+	}
+
+	virtual ~SSignal0()
+	{
+		clear();
+	}
+
+	virtual void clear()
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			//Notify to the slot that the signal is dying
+			(*it)->getTarget()->_signalDestroyed(this);
+
+			delete (*it);
+			it++;
+		}
+
+		connections.clear();
+	}
+
+	template <class SSlotType>
+	bool connect(SSlotType *slotTarget, void (SSlotType::*callableMethod)())
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		if (dynamic_cast<SSlot*>(slotTarget) == NULL)
+		{
+			sWarning("SSignal0::connect() first argument (slotTarget) doesn't extends SSlot class.");
+			return false;
+		}
+
+		internalS::SSignalSlotConnection0<SSlotType> *conn =
+				new internalS::SSignalSlotConnection0<SSlotType> (slotTarget, callableMethod, flags);
+		connections.push_back(conn);
+		dynamic_cast<SSlot*>(slotTarget)->_addConnectedSignal(this);
+
+		return true;
+	}
+
+	void fire()
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		if (connections.empty())
+			return;
+
+		//Async call?
+		if (flags & SSignalFlagAsyncConnection)
+		{
+			internalS::SSignalCall sc(this);
+			SApplication::getInstance()->addAsyncCall(sc);
+
+			return;
+		}
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			(*it)->fire();
+			it++;
+		}
+	}
+
+	void operator()()
+	{
+		fire();
+	}
+
+	virtual void disconnectAll(SSlot *slotTarget)
+	{
+		SMutexLocker locker(&signalMutex); S_USE_VAR(locker);
+
+		ConnectionListConstIterator it = connections.begin();
+		ConnectionListConstIterator end = connections.end();
+
+		while (it != end)
+		{
+			if ((*it)->getTarget() == slotTarget)
+			{
+				delete (*it);
+				it = connections.erase(it);
+			}
+			else
+				it++;
+		}
+	}
+
+	virtual void asyncExec(const std::map<int, SVariant> &/*args*/)
+	{
+		fire();	//SSignal0 has no args
+	}
+};
+
+#endif // SSIGNAL0_H
